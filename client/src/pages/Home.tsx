@@ -33,31 +33,13 @@ export default function Home() {
 
   const pricingPlans = [
     {
-      name: "Plan Gratuito",
-      price: "0€",
-      description: "Prueba Belentani sin compromiso",
-      credits: "1 CV de prueba",
-      features: ["1 CV generado", "Descarga en PDF", "Sin tarjeta de crédito requerida"],
-      cta: "Comenzar Gratis",
-      highlighted: false,
-    },
-    {
-      name: "1 CV",
+      name: "CV Profesional",
       price: "0,99€",
-      description: "Perfecto para una candidatura",
-      credits: "1 crédito",
-      features: ["1 CV generado", "Descarga en PDF", "Análisis ATS básico"],
-      cta: "Comprar Ahora",
+      description: "Pago único, tuyo de por vida",
+      credits: "1 CV",
+      features: ["CV optimizado ATS", "PDF descargable", "Edición ilimitada", "Historial de por vida", "Si no te gusta, lo revisamos"],
+      cta: "Generar CV",
       highlighted: true,
-    },
-    {
-      name: "5 CVs",
-      price: "2,99€",
-      description: "Mejor valor para múltiples candidaturas",
-      credits: "5 créditos",
-      features: ["5 CVs generados", "Descargas en PDF", "Análisis ATS ilimitado"],
-      cta: "Comprar Ahora",
-      highlighted: false,
     },
   ];
 
@@ -140,8 +122,8 @@ export default function Home() {
         {/* Trust Indicators */}
         <div className="grid grid-cols-3 gap-8 text-center mb-16">
           <div>
-            <div className="text-3xl font-bold text-blue-600">0€</div>
-            <p className="text-slate-600">Plan gratuito sin tarjeta</p>
+            <div className="text-3xl font-bold text-blue-600">0,99€</div>
+            <p className="text-slate-600">Pago único por CV</p>
           </div>
           <div>
             <div className="text-3xl font-bold text-blue-600">0,99€</div>

@@ -111,3 +111,16 @@ export const privacyRequests = mysqlTable("privacyRequests", {
 
 export type PrivacyRequest = typeof privacyRequests.$inferSelect;
 export type InsertPrivacyRequest = typeof privacyRequests.$inferInsert;
+export const qualityReports = mysqlTable("qualityReports", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  documentId: int("documentId").notNull(),
+  issue: text("issue").notNull(),
+  status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
+  adminNotes: text("adminNotes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  resolvedAt: timestamp("resolvedAt"),
+});
+
+export type QualityReport = typeof qualityReports.$inferSelect;
+export type InsertQualityReport = typeof qualityReports.$inferInsert;

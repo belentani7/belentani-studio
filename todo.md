@@ -36,7 +36,7 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 ### Landing Page (client/src/pages/Home.tsx)
 - [x] Hero section with Belentani branding and value proposition
 - [x] Feature cards (AI-powered, ATS optimization, instant PDF, affordable)
-- [x] Pricing section with credit packs (0,99€ for 1 CV, 2,99€ for 5 CVs)
+- [x] Pricing section with single price (0,99€ per CV, no subscription)
 - [x] Testimonials section (placeholder for real user feedback)
 - [x] CTA buttons: "Get Started Free" and "Learn More"
 - [x] Footer with legal links (Privacy, Terms, Contact)

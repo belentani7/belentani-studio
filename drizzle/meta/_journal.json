@@ -15,6 +15,13 @@
       "when": 1781140514649,
       "tag": "0001_rich_beyonder",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1783163447725,
+      "tag": "0002_handy_bug",
+      "breakpoints": true
     }
   ]
 }
