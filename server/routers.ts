@@ -74,3 +74,12 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+
+  cvDownload: protectedProcedure
+    .input(z.object({ documentId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const doc = await getUserDocuments(ctx.user.id);
+      const cv = doc.find(d => d.id === input.documentId);
+      if (!cv) throw new Error('CV not found');
+      return { url: `/api/cv/${input.documentId}/download` };
+    }),
