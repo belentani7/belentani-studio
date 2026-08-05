@@ -6,7 +6,7 @@ import { z } from "zod";
 import { getUserDocuments, createDocument, createQualityReport, getQualityReports } from "./db";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
 export const appRouter = router({
   system: systemRouter,
@@ -41,18 +41,16 @@ export const appRouter = router({
     }),
   }),
 
-  payment: router({
-    createCheckout: protectedProcedure
-      .input(z.object({ documentId: z.number() }))
+  donation: router({
+    createCheckout: publicProcedure
+      .input(z.object({ amount: z.number().min(1) }))
       .mutation(async ({ ctx, input }) => {
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ["card"],
-          line_items: [{ price_data: { currency: "eur", product_data: { name: "CV Professional", description: "AI-generated professional CV" }, unit_amount: 99 }, quantity: 1 }],
+          line_items: [{ price_data: { currency: "eur", product_data: { name: "Donación - Plataforma Educativa", description: "Apoya la educación de inmigrantes en España" }, unit_amount: input.amount * 100 }, quantity: 1 }],
           mode: "payment",
-          success_url: `${ctx.req.headers.origin}/dashboard?payment=success`,
-          cancel_url: `${ctx.req.headers.origin}/dashboard?payment=cancelled`,
-          customer_email: ctx.user.email || undefined,
-          metadata: { user_id: ctx.user.id.toString(), document_id: input.documentId.toString() },
+          success_url: `${ctx.req.headers.origin}/dashboard?donation=success`,
+          cancel_url: `${ctx.req.headers.origin}/dashboard?donation=cancelled`,
         });
         return { checkoutUrl: session.url };
       }),
@@ -74,12 +72,3 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
-
-  cvDownload: protectedProcedure
-    .input(z.object({ documentId: z.number() }))
-    .mutation(async ({ ctx, input }) => {
-      const doc = await getUserDocuments(ctx.user.id);
-      const cv = doc.find(d => d.id === input.documentId);
-      if (!cv) throw new Error('CV not found');
-      return { url: `/api/cv/${input.documentId}/download` };
-    }),

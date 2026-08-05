@@ -30,7 +30,7 @@ export async function logAudit(
       userAgent,
       status,
       errorMessage,
-      createdAt: new Date(),
+      timestamp: new Date(),
     } as any);
   } catch (error) {
     console.error('[AuditLog] Failed to log:', error);
@@ -42,7 +42,7 @@ export async function getAuditLogs(userId: number, limit: number = 50) {
   if (!db) return [];
 
   try {
-    return await db.select().from(auditLogs).where(eq(auditLogs.userId, userId)).limit(limit).orderBy(desc(auditLogs.createdAt));
+    return await db.select().from(auditLogs).where(eq(auditLogs.userId, userId)).limit(limit).orderBy(desc(auditLogs.timestamp));
   } catch (error) {
     console.error('[AuditLog] Failed to fetch:', error);
     return [];
