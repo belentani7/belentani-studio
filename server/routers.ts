@@ -3,8 +3,9 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { getUserDocuments, createDocument, createQualityReport, getQualityReports } from "./db";
+import { getUserDocuments, createDocument, createQualityReport, getQualityReports, getUserTransactions, requestAccountDeletion } from "./db";
 import Stripe from "stripe";
+import { enhanceCVWithAI } from "./_core/cvPipeline";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
@@ -29,9 +30,12 @@ export const appRouter = router({
         experience: z.array(z.object({ company: z.string(), position: z.string(), duration: z.string(), description: z.string() })),
         education: z.array(z.object({ school: z.string(), degree: z.string(), year: z.string() })),
         skills: z.array(z.string()),
+        photoUrl: z.string().startsWith("/manus-storage/").optional(),
+        location: z.string().max(160).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const cvData = { title: `CV - ${input.fullName}`, content: JSON.stringify(input), keywords: input.skills };
+        const enhanced = await enhanceCVWithAI(input);
+        const cvData = { ...enhanced, title: `CV - ${input.fullName}`, content: JSON.stringify(enhanced), keywords: input.skills };
         const docId = await createDocument(ctx.user.id, `CV - ${input.fullName}`, cvData);
         return { success: true, documentId: docId };
       }),
@@ -54,6 +58,15 @@ export const appRouter = router({
         });
         return { checkoutUrl: session.url };
       }),
+  }),
+
+  privacy: router({
+    dataExport: protectedProcedure.query(async ({ ctx }) => ({
+      profile: { id: ctx.user.id, name: ctx.user.name, email: ctx.user.email, createdAt: ctx.user.createdAt },
+      documents: await getUserDocuments(ctx.user.id),
+      transactions: await getUserTransactions(ctx.user.id),
+    })),
+    requestDeletion: protectedProcedure.mutation(async ({ ctx }) => ({ success: await requestAccountDeletion(ctx.user.id) })),
   }),
 
   quality: router({

@@ -1,6 +1,6 @@
-import { eq, desc } from "drizzle-orm";
+import { and, eq, desc, isNull } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, documents, transactions, qualityReports } from "../drizzle/schema";
+import { InsertUser, users, documents, transactions, qualityReports, privacyRequests } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -57,6 +57,13 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   }
 }
 
+export async function getUserById(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  return result[0];
+}
+
 export async function getUserByOpenId(openId: string) {
   const db = await getDb();
   if (!db) return undefined;
@@ -67,7 +74,24 @@ export async function getUserByOpenId(openId: string) {
 export async function getUserDocuments(userId: number) {
   const db = await getDb();
   if (!db) return [];
-  return await db.select().from(documents).where(eq(documents.userId, userId)).orderBy(desc(documents.createdAt));
+  return await db.select().from(documents).where(and(eq(documents.userId, userId), isNull(documents.deletedAt))).orderBy(desc(documents.createdAt));
+}
+
+export async function getDocumentById(documentId: number, userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(documents).where(eq(documents.id, documentId)).limit(1);
+  const document = result[0];
+  return document?.userId === userId && !document.deletedAt ? document : undefined;
+}
+
+export async function setDocumentPdfUrl(documentId: number, userId: number, pdfUrl: string) {
+  const db = await getDb();
+  if (!db) return false;
+  const document = await getDocumentById(documentId, userId);
+  if (!document) return false;
+  await db.update(documents).set({ pdfUrl, status: "generated" }).where(eq(documents.id, documentId));
+  return true;
 }
 
 export async function createDocument(userId: number, title: string, cvData: any) {
@@ -89,6 +113,21 @@ export async function createQualityReport(userId: number, documentId: number, is
   if (!db) return null;
   const result = await db.insert(qualityReports).values({ userId, documentId, issue, status: "pending" } as any);
   return (result as any)[0]?.insertId;
+}
+
+export async function getUserTransactions(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(transactions).where(eq(transactions.userId, userId)).orderBy(desc(transactions.createdAt));
+}
+
+export async function requestAccountDeletion(userId: number) {
+  const db = await getDb();
+  if (!db) return false;
+  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  await db.update(documents).set({ deletedAt: new Date(), status: "archived" }).where(eq(documents.userId, userId));
+  await db.insert(privacyRequests).values({ userId, type: "account_deletion", status: "pending", requestedAt: new Date(), expiresAt } as any);
+  return true;
 }
 
 export async function getQualityReports() {

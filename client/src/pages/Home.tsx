@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { CheckCircle2, FileText, Zap, Lock, BarChart3, Download } from "lucide-react";
 import { getLoginUrl } from "@/const";
 import { Link } from "wouter";
+import { trpc } from "@/lib/trpc";
 
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
@@ -31,17 +32,9 @@ export default function Home() {
     },
   ];
 
-  const pricingPlans = [
-    {
-      name: "CV Profesional",
-      price: "0,99€",
-      description: "Pago único, tuyo de por vida",
-      credits: "1 CV",
-      features: ["CV optimizado ATS", "PDF descargable", "Edición ilimitada", "Historial de por vida", "Si no te gusta, lo revisamos"],
-      cta: "Generar CV",
-      highlighted: true,
-    },
-  ];
+  const donation = trpc.donation.createCheckout.useMutation();
+  const pricingPlans = [{ name: "Todo gratis", price: "0€", description: "Sin suscripción ni pago obligatorio", credits: "CV + cursos + PDF", features: ["Generación de CV con IA", "PDF descargable", "Foto opcional", "Cursos de informática e IA", "39 idiomas disponibles"], cta: "Crear mi CV", highlighted: true }];
+  const handleDonation = async (amount: number) => { const result = await donation.mutateAsync({ amount }); if (result.checkoutUrl) window.open(result.checkoutUrl, "_blank", "noopener,noreferrer"); };
 
   const testimonials = [
     {
@@ -101,7 +94,7 @@ export default function Home() {
             Tu CV Perfecto en Minutos
           </h1>
           <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-            Genera CVs profesionales optimizados para sistemas de selección automática (ATS) con inteligencia artificial. Accesible, seguro y a menos de 1€.
+            Genera tu CV profesional gratis con inteligencia artificial, aprende informática y mejora tus oportunidades en España. Accesible, seguro y pensado para todos.
           </p>
         </div>
 
@@ -112,22 +105,18 @@ export default function Home() {
               Comenzar Gratis
             </Button>
           </a>
-          <a href="#pricing">
-            <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-              Ver Precios
-            </Button>
-          </a>
+          <Link href="/courses"><Button size="lg" variant="outline" className="px-8 py-6 text-lg">Aprender gratis</Button></Link>
         </div>
 
         {/* Trust Indicators */}
         <div className="grid grid-cols-3 gap-8 text-center mb-16">
           <div>
-            <div className="text-3xl font-bold text-blue-600">0,99€</div>
-            <p className="text-slate-600">Pago único por CV</p>
+            <div className="text-3xl font-bold text-blue-600">0€</div>
+            <p className="text-slate-600">CV y cursos gratis</p>
           </div>
           <div>
-            <div className="text-3xl font-bold text-blue-600">0,99€</div>
-            <p className="text-slate-600">Por CV profesional</p>
+            <div className="text-3xl font-bold text-blue-600">39</div>
+            <p className="text-slate-600">Idiomas disponibles</p>
           </div>
           <div>
             <div className="text-3xl font-bold text-blue-600">100%</div>
@@ -160,12 +149,8 @@ export default function Home() {
       {/* Pricing Section */}
       <section id="pricing" className="py-20 bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-slate-900 mb-4">
-            Precios Accesibles para Todos
-          </h2>
-          <p className="text-center text-slate-600 mb-16 max-w-2xl mx-auto">
-            Sin suscripción, sin sorpresas. Paga solo por lo que usas.
-          </p>
+          <h2 className="text-4xl font-bold text-center text-slate-900 mb-4">Gratis para quien lo necesita</h2>
+          <p className="text-center text-slate-600 mb-10 max-w-2xl mx-auto">No cobramos por crear ni descargar tu CV. Si puedes y quieres apoyar el proyecto educativo, puedes hacer una donación voluntaria.</p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {pricingPlans.map((plan, idx) => (
@@ -196,44 +181,14 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <a href={getLoginUrl()} className="block">
-                  <Button
-                    className="w-full"
-                    variant={plan.highlighted ? "default" : "outline"}
-                  >
-                    {plan.cta}
-                  </Button>
-                </a>
+                <a href={getLoginUrl()} className="block"><Button className="w-full">{plan.cta}</Button></a>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="bg-white py-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-slate-900 mb-16">
-            Lo que dicen nuestros usuarios
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, idx) => (
-              <Card key={idx} className="p-6 border border-slate-200">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-slate-900">{testimonial.name}</p>
-                    <p className="text-sm text-slate-600">{testimonial.role}</p>
-                  </div>
-                </div>
-                <p className="text-slate-700 italic">\"{ testimonial.text}\"</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      <section className="bg-white py-16"><div className="mx-auto max-w-4xl px-4 text-center"><h2 className="text-3xl font-bold text-slate-900">Proyecto abierto y transparente</h2><p className="mt-3 text-slate-600">No inventamos testimonios. Publicaremos experiencias reales únicamente con permiso explícito.</p><div className="mt-8 flex flex-wrap justify-center gap-3"><Button variant="outline" onClick={() => handleDonation(3)} disabled={donation.isPending}>Apoyar con 3€</Button><Button variant="outline" onClick={() => handleDonation(5)} disabled={donation.isPending}>Apoyar con 5€</Button><Link href="/courses"><Button>Ver cursos gratis</Button></Link></div></div></section>
 
       {/* CTA Section */}
       <section className="bg-blue-600 text-white py-20">

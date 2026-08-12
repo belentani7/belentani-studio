@@ -376,3 +376,17 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [ ] Security audit completed
 - [ ] Penetration testing completed (optional but recommended)
 - [ ] Insurance for data breach (optional but recommended)
+
+## Full stack real y estabilización
+- [x] Corregir error de compilación en server/routers.ts
+- [x] Verificar build de producción y arranque del servidor
+- [x] Implementar generación de PDF descargable desde el backend
+- [x] Implementar subida y asociación de foto al CV
+- [x] Integrar IA real en el flujo de creación del CV
+- [x] Integrar cursos y material didáctico multiidioma
+- [x] Implementar donaciones voluntarias sin cobro por CV
+- [ ] Verificar privacidad, eliminación y exportación de datos
+- [x] Ejecutar pruebas unitarias y de flujo completo
+- [x] Guardar checkpoint únicamente después de build y pruebas exitosos
+- [x] Traducir y servir el contenido didáctico real en los 39 idiomas soportados
+- [x] Añadir prueba que confirme que el contenido cambia al cambiar de idioma

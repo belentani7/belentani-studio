@@ -18,10 +18,32 @@ export default function Dashboard() {
     experience: [{ company: "", position: "", duration: "", description: "" }],
     education: [{ school: "", degree: "", year: "" }],
     skills: [] as string[],
+    location: "",
+    photoUrl: "",
   });
 
   const generateCV = trpc.cv.generate.useMutation();
   const listCVs = trpc.cv.list.useQuery();
+
+  const handlePhotoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.match(/^image\/(jpeg|png|webp)$/) || file.size > 5 * 1024 * 1024) {
+      toast.error("La foto debe ser JPG, PNG o WebP y pesar menos de 5 MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const response = await fetch("/api/cv/photo", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ dataUrl: reader.result }) });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Error");
+        setFormData((current) => ({ ...current, photoUrl: result.url }));
+        toast.success("Foto añadida al CV");
+      } catch { toast.error("No se pudo subir la foto"); }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleGenerateCV = async () => {
     if (!formData.fullName || !formData.email) {
@@ -83,12 +105,21 @@ export default function Dashboard() {
                     />
                   </div>
                   <div>
+                    <label className="block text-sm font-medium mb-2">Foto (opcional)</label>
+                    <Input type="file" accept="image/jpeg,image/png,image/webp" onChange={handlePhotoChange} />
+                    {formData.photoUrl && <p className="text-xs text-green-700 mt-1">Foto lista para incluirse en el PDF</p>}
+                  </div>
+                  <div>
                     <label className="block text-sm font-medium mb-2">Teléfono</label>
                     <Input
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+34..."
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Ciudad o localidad</label>
+                    <Input value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} placeholder="Barcelona, España" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">Resumen Profesional</label>
@@ -107,7 +138,7 @@ export default function Dashboard() {
                     />
                   </div>
                   <Button onClick={handleGenerateCV} disabled={generateCV.isPending} className="w-full">
-                    {generateCV.isPending ? "Generando..." : "Generar CV (0,99€)"}
+                    {generateCV.isPending ? "Generando..." : "Generar CV gratis"}
                   </Button>
                 </div>
               </Card>
@@ -128,7 +159,7 @@ export default function Dashboard() {
                         <p className="font-bold">{cv.title}</p>
                         <p className="text-sm text-slate-600">{new Date(cv.createdAt).toLocaleDateString()}</p>
                       </div>
-                      <Button variant="outline">Descargar</Button>
+                      <a className="inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50" href={`/api/cv/${cv.id}/pdf`}>Descargar PDF</a>
                     </Card>
                   ))}
                 </div>
