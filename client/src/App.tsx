@@ -8,6 +8,8 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import PrivacyPanel from "./pages/PrivacyPanel";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import CookieBanner from "./components/CookieBanner";
 
 function Router() {
@@ -17,6 +19,8 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/courses" component={Courses} />
       <Route path="/privacy-panel" component={PrivacyPanel} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
