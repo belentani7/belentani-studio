@@ -2,137 +2,24 @@ import { Card } from "@/components/ui/card";
 
 export default function Privacy() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">Política de Privacidad</h1>
-        <p className="text-slate-600 mb-8">Última actualización: Julio 2026</p>
+    <main className="min-h-screen bg-slate-50 p-8 text-slate-900">
+      <div className="mx-auto max-w-4xl">
+        <p className="mb-3 font-semibold text-blue-700">Belentani · Información de privacidad</p>
+        <h1 className="text-4xl font-bold">Política de Privacidad</h1>
+        <p className="mt-3 text-slate-600">Borrador operativo. Debe completarse con la identidad jurídica, domicilio, registro y canales reales del responsable antes del lanzamiento comercial.</p>
 
-        <div className="space-y-8">
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">1. Responsable del Tratamiento</h2>
-            <p className="text-slate-700 mb-2"><strong>Belentani Studio</strong></p>
-            <p className="text-slate-600">Email: legal@belentani.com</p>
-            <p className="text-slate-600">Responsable de Protección de Datos (DPO): dpo@belentani.com</p>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">2. Datos que Recolectamos</h2>
-            <ul className="list-disc pl-6 space-y-2 text-slate-700">
-              <li>Nombre completo</li>
-              <li>Email</li>
-              <li>Teléfono (opcional)</li>
-              <li>Información del CV (proporcionada por ti)</li>
-              <li>Datos de pago (procesados por Stripe, no almacenados localmente)</li>
-              <li>Dirección IP y user-agent (para seguridad)</li>
-            </ul>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">3. Base Legal</h2>
-            <p className="text-slate-700 mb-4">Tratamos tus datos bajo:</p>
-            <ul className="list-disc pl-6 space-y-2 text-slate-700">
-              <li><strong>Contrato:</strong> Para prestar el servicio de generación de CVs</li>
-              <li><strong>Consentimiento:</strong> Para marketing y cookies analíticas</li>
-              <li><strong>Obligación Legal:</strong> Retención de transacciones (6 años)</li>
-            </ul>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">4. Tus Derechos (GDPR)</h2>
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-bold text-slate-900">Derecho de Acceso</h3>
-                <p className="text-slate-700">Puedes descargar TODOS tus datos en JSON desde tu panel.</p>
-              </div>
-              <div>
-                <h3 className="font-bold text-slate-900">Derecho de Rectificación</h3>
-                <p className="text-slate-700">Edita tu perfil en cualquier momento.</p>
-              </div>
-              <div>
-                <h3 className="font-bold text-slate-900">Derecho al Olvido</h3>
-                <p className="text-slate-700">Solicita eliminación de todos tus datos. Período de gracia: 30 días (recuperable).</p>
-              </div>
-              <div>
-                <h3 className="font-bold text-slate-900">Derecho de Portabilidad</h3>
-                <p className="text-slate-700">Exporta tus datos en formato estándar.</p>
-              </div>
-              <div>
-                <h3 className="font-bold text-slate-900">Derecho a Oposición</h3>
-                <p className="text-slate-700">Oposición a marketing y perfilado.</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">5. Retención de Datos</h2>
-            <table className="w-full text-sm text-slate-700">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-2">Tipo de Dato</th>
-                  <th className="text-left py-2">Período</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b">
-                  <td className="py-2">Perfil de usuario</td>
-                  <td>Mientras activo</td>
-                </tr>
-                <tr className="border-b">
-                  <td className="py-2">CVs generados</td>
-                  <td>Mientras activo + 30 días post-eliminación</td>
-                </tr>
-                <tr className="border-b">
-                  <td className="py-2">Transacciones</td>
-                  <td>6 años (ley fiscal)</td>
-                </tr>
-                <tr className="border-b">
-                  <td className="py-2">Logs de auditoría</td>
-                  <td>1 año</td>
-                </tr>
-              </tbody>
-            </table>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">6. Seguridad</h2>
-            <ul className="list-disc pl-6 space-y-2 text-slate-700">
-              <li>Encriptación AES-256 en reposo</li>
-              <li>HTTPS/TLS 1.3 en tránsito</li>
-              <li>Autenticación OAuth 2.0</li>
-              <li>Auditoría completa de accesos</li>
-              <li>Backups diarios encriptados</li>
-            </ul>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">7. Brechas de Seguridad</h2>
-            <p className="text-slate-700">Si ocurre una brecha de seguridad, notificaremos a la Autoridad Catalana de Protección de Datos (AAPD) en máximo 72 horas y te enviaremos un email con detalles.</p>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">8. Cookies</h2>
-            <p className="text-slate-700 mb-4">Usamos cookies para:</p>
-            <ul className="list-disc pl-6 space-y-2 text-slate-700">
-              <li><strong>Necesarias:</strong> Autenticación y seguridad (no requieren consentimiento)</li>
-              <li><strong>Analíticas:</strong> Google Analytics (requiere consentimiento)</li>
-              <li><strong>Marketing:</strong> Remarketing (requiere consentimiento)</li>
-            </ul>
-            <p className="text-slate-700 mt-4">Puedes cambiar preferencias de cookies en cualquier momento.</p>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">9. Contacto y Reclamaciones</h2>
-            <p className="text-slate-700 mb-4">Para ejercer tus derechos o hacer consultas:</p>
-            <p className="text-slate-700 mb-4"><strong>Belentani:</strong> legal@belentani.com</p>
-            <p className="text-slate-700"><strong>AAPD (Autoridad Catalana):</strong> aapd@gencat.cat | +34 93 552 06 00</p>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">10. Cambios en esta Política</h2>
-            <p className="text-slate-700">Nos reservamos el derecho de actualizar esta política. Notificaremos cambios significativos por email.</p>
-          </Card>
+        <div className="mt-8 space-y-6">
+          <Card className="p-6"><h2 className="text-2xl font-bold">1. Responsable</h2><p className="mt-3 text-slate-700">Responsable: <strong>[nombre o razón social real]</strong>. Domicilio: <strong>[domicilio]</strong>. Contacto de privacidad: <strong>[correo real]</strong>. No se debe publicar un DPD ficticio: si la designación de delegado es obligatoria o se decide voluntariamente, se indicará la persona o entidad y su canal efectivo.</p></Card>
+          <Card className="p-6"><h2 className="text-2xl font-bold">2. Datos tratados</h2><p className="mt-3 text-slate-700">La plataforma puede tratar identidad, correo, teléfono y localidad, información profesional introducida para el CV, fotografía opcional, documentos generados, datos técnicos de seguridad y registros de solicitudes de privacidad. Stripe u otros proveedores de pago tratan los datos de pago en sus propios sistemas; Belentani no debe almacenar números completos de tarjeta ni CVV.</p></Card>
+          <Card className="p-6"><h2 className="text-2xl font-bold">3. Finalidades y bases jurídicas</h2><p className="mt-3 text-slate-700">Prestar la generación de CV y guardar documentos a petición del usuario: ejecución del servicio. Mantener seguridad, prevenir abuso y atender incidencias: interés legítimo, documentado y ponderado. Cumplir obligaciones fiscales o legales: obligación legal cuando proceda. Marketing, analítica no necesaria y cookies no esenciales: consentimiento separado y revocable.</p></Card>
+          <Card className="p-6"><h2 className="text-2xl font-bold">4. IA, proveedores y transferencias</h2><p className="mt-3 text-slate-700">Los datos introducidos pueden enviarse al proveedor LLM configurado para generar el contenido. Antes del lanzamiento deben identificarse por nombre todos los proveedores, sus ubicaciones, subencargados, períodos de conservación, garantías de transferencias internacionales y contratos de encargo. No se utilizarán CVs para entrenar modelos salvo consentimiento válido y separado o base jurídica aplicable.</p></Card>
+          <Card className="p-6"><h2 className="text-2xl font-bold">5. Conservación y eliminación</h2><p className="mt-3 text-slate-700">Los documentos se ocultan al solicitar la eliminación y existe una purga programable para solicitudes vencidas. El responsable debe activar y supervisar el job de purga, eliminar también los objetos asociados del almacenamiento cuando sea posible y documentar las excepciones legales de conservación. No se debe afirmar que el borrado es inmediato o total si el proceso no se ha ejecutado y verificado.</p></Card>
+          <Card className="p-6"><h2 className="text-2xl font-bold">6. Derechos</h2><p className="mt-3 text-slate-700">Puedes solicitar acceso, rectificación, supresión, limitación, oposición y portabilidad, así como retirar consentimientos. El panel permite descargar una copia de los datos disponibles y solicitar eliminación; para datos o copias que no aparezcan, escribe al contacto real de privacidad. Se responderá dentro de los plazos del RGPD, previa verificación proporcional de identidad.</p></Card>
+          <Card className="p-6"><h2 className="text-2xl font-bold">7. Seguridad y brechas</h2><p className="mt-3 text-slate-700">La aplicación utiliza OAuth, cookies HttpOnly, HTTPS del entorno de alojamiento, cabeceras de seguridad, límites de solicitudes, validación de entradas, control de propiedad de documentos y re-procesado de imágenes. El cifrado aplicado a cada campo y la configuración de claves deben verificarse separadamente; esta página no afirma cifrado en reposo total. Las brechas se evaluarán y, cuando proceda, se notificarán a la autoridad competente en el plazo legal y a las personas afectadas cuando exista alto riesgo.</p></Card>
+          <Card className="p-6"><h2 className="text-2xl font-bold">8. Cookies</h2><p className="mt-3 text-slate-700">Actualmente se pretende usar únicamente cookies necesarias para sesión y seguridad. No deben activarse analítica, publicidad ni cookies no esenciales antes de obtener consentimiento granular. El banner debe permitir aceptar, rechazar y configurar con igual facilidad, y conservar prueba de la elección.</p></Card>
+          <Card className="p-6"><h2 className="text-2xl font-bold">9. Reclamaciones</h2><p className="mt-3 text-slate-700">Puedes reclamar ante la <a className="text-blue-700 underline" href="https://www.aepd.es/" target="_blank" rel="noreferrer">AEPD</a> o, cuando sea competente, ante la <a className="text-blue-700 underline" href="https://apdcat.gencat.cat/" target="_blank" rel="noreferrer">APDCAT</a>. El responsable debe completar antes del lanzamiento su identidad, domicilio y canal de reclamaciones.</p></Card>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

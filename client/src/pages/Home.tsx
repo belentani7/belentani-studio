@@ -29,7 +29,7 @@ export default function Home() {
       <section className="flex-1 max-w-6xl mx-auto px-4 py-20 text-center">
         <div className="mb-8">
           <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">Tu CV Perfecto en Minutos</h1>
-          <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">Genera tu CV profesional gratis con inteligencia artificial, aprende informática y mejora tus oportunidades en España. Accesible, seguro y pensado para todos.</p>
+          <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">Genera tu CV profesional gratis con inteligencia artificial, aprende informática y mejora tus oportunidades en España. Accesible, con controles de privacidad y pensado para todos.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <a href={getLoginUrl()}><Button size="lg" className="px-8 py-6 text-lg">Comenzar Gratis</Button></a>
@@ -38,7 +38,7 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-8 text-center mb-16">
           <div><div className="text-3xl font-bold text-blue-600">0€</div><p className="text-slate-600">CV y cursos gratis</p></div>
           <div><div className="text-3xl font-bold text-blue-600">39</div><p className="text-slate-600">Idiomas disponibles</p></div>
-          <div><div className="text-3xl font-bold text-blue-600">100%</div><p className="text-slate-600">Seguridad GDPR</p></div>
+          <div><div className="text-3xl font-bold text-blue-600">GDPR</div><p className="text-slate-600">Privacidad en el diseño</p></div>
         </div>
       </section>
 
@@ -49,7 +49,7 @@ export default function Home() {
             <Card className="p-6 border border-slate-200"><Zap className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">IA Instantánea</h3><p className="text-slate-600">Crea tu CV optimizado para ATS en minutos.</p></Card>
             <Card className="p-6 border border-slate-200"><Download className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">PDF con Foto</h3><p className="text-slate-600">Descarga tu documento listo para enviar.</p></Card>
             <Card className="p-6 border border-slate-200"><BarChart3 className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Cursos Libres</h3><p className="text-slate-600">Aprende informática e IA en 39 idiomas.</p></Card>
-            <Card className="p-6 border border-slate-200"><Lock className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Privacidad GDPR</h3><p className="text-slate-600">Tus datos bajo estrictas leyes de la UE.</p></Card>
+            <Card className="p-6 border border-slate-200"><Lock className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Privacidad GDPR</h3><p className="text-slate-600">Controles de acceso, eliminación y exportación.</p></Card>
           </div>
         </div>
       </section>

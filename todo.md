@@ -390,3 +390,24 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Guardar checkpoint únicamente después de build y pruebas exitosos
 - [x] Traducir y servir el contenido didáctico real en los 39 idiomas soportados
 - [x] Añadir prueba que confirme que el contenido cambia al cambiar de idioma
+
+## Auditoría Pesada y Rigurosa
+- [x] Inventariar código, rutas, dependencias, esquema y endpoints de producción
+- [x] Auditar seguridad, autenticación, cifrado, control de accesos y pagos/donaciones Stripe
+- [x] Verificar flujo disponible de CV con IA, foto, PDF y persistencia; documentar límites E2E
+- [x] Auditar cumplimiento GDPR España/UE y Cataluña (DSAR, borrado lógico, DPO, retención)
+- [x] Verificar catálogo multiidioma (39 idiomas) y traducción dinámica
+- [x] Ejecutar pruebas de regresión disponibles (17 pruebas) y documentar riesgos residuales
+
+### Correcciones críticas de auditoría
+- [x] Validar y allowlistear Origin/URLs en donaciones Stripe y limitar cantidades
+- [x] Comprobar propiedad del documento antes de crear un quality report
+- [x] Añadir rate limiting y cabeceras HTTP de seguridad
+- [ ] Validar límites estrictos de CV y sanitizar entradas del backend
+- [x] Validar, re-encodear fotos con Sharp y restringir claves de storage al usuario
+- [ ] Migrar cifrado a AES-256-GCM con clave obligatoria y aplicarlo al CV sensible
+- [ ] Implementar purga GDPR de documentos, solicitudes y objetos almacenados expirados
+- [x] Corregir helpers de transacciones para coincidir con el esquema
+- [ ] Añadir pruebas de regresión de autorización, origin, límites, purga y PDF por propietario
+- [x] Restringir photoUrl al prefijo del usuario autenticado y corregir el patrón real de claves sin extensión
+- [x] Añadir prueba que impida usar una foto perteneciente a otro usuario

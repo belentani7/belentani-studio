@@ -1,6 +1,6 @@
-import { and, eq, desc, isNull } from "drizzle-orm";
+import { and, eq, desc, isNull, lt } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, documents, transactions, qualityReports, privacyRequests } from "../drizzle/schema";
+import { InsertUser, users, documents, transactions, qualityReports, privacyRequests, auditLogs } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -101,10 +101,10 @@ export async function createDocument(userId: number, title: string, cvData: any)
   return (result as any)[0]?.insertId;
 }
 
-export async function createTransaction(userId: number, documentId: number, amount: string, stripeId: string) {
+export async function createTransaction(userId: number, amount: string, stripePaymentId: string, stripeChargeId?: string) {
   const db = await getDb();
   if (!db) return null;
-  const result = await db.insert(transactions).values({ userId, documentId, type: "purchase", amount, stripeId, status: "completed" } as any);
+  const result = await db.insert(transactions).values({ userId, type: "purchase", amount, stripePaymentId, stripeChargeId, status: "completed" } as any);
   return (result as any)[0]?.insertId;
 }
 
@@ -121,6 +121,18 @@ export async function getUserTransactions(userId: number) {
   return await db.select().from(transactions).where(eq(transactions.userId, userId)).orderBy(desc(transactions.createdAt));
 }
 
+export async function getUserAuditLogs(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(auditLogs).where(eq(auditLogs.userId, userId)).orderBy(desc(auditLogs.timestamp));
+}
+
+export async function getUserPrivacyRequests(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(privacyRequests).where(eq(privacyRequests.userId, userId)).orderBy(desc(privacyRequests.requestedAt));
+}
+
 export async function requestAccountDeletion(userId: number) {
   const db = await getDb();
   if (!db) return false;
@@ -128,6 +140,21 @@ export async function requestAccountDeletion(userId: number) {
   await db.update(documents).set({ deletedAt: new Date(), status: "archived" }).where(eq(documents.userId, userId));
   await db.insert(privacyRequests).values({ userId, type: "account_deletion", status: "pending", requestedAt: new Date(), expiresAt } as any);
   return true;
+}
+
+export async function purgeExpiredPrivacyData(now = new Date()) {
+  const db = await getDb();
+  if (!db) return { processed: 0 };
+  const expired = await db.select().from(privacyRequests).where(and(eq(privacyRequests.type, "account_deletion"), eq(privacyRequests.status, "pending"), lt(privacyRequests.expiresAt, now)));
+  let processed = 0;
+  for (const request of expired) {
+    await db.delete(qualityReports).where(eq(qualityReports.userId, request.userId));
+    await db.delete(documents).where(eq(documents.userId, request.userId));
+    await db.update(users).set({ openId: `deleted-${request.userId}-${request.id}`, name: null, email: null, loginMethod: "deleted" }).where(eq(users.id, request.userId));
+    await db.update(privacyRequests).set({ status: "completed", completedAt: now }).where(eq(privacyRequests.id, request.id));
+    processed += 1;
+  }
+  return { processed };
 }
 
 export async function getQualityReports() {
