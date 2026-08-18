@@ -414,5 +414,5 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 
 ## Publicación en GitHub
 - [x] Comprobar estado de Git y exclusión de secretos (.gitignore)
-- [ ] Crear repositorio privado o público en GitHub mediante gh CLI
-- [ ] Subir la rama principal con los cambios verificados
+- [x] Crear repositorio privado o público en GitHub mediante gh CLI
+- [x] Subir la rama principal con los cambios verificados
