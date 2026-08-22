@@ -385,11 +385,11 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Integrar IA real en el flujo de creación del CV
 - [x] Integrar cursos y material didáctico multiidioma
 - [x] Implementar donaciones voluntarias sin cobro por CV
-- [ ] Verificar privacidad, eliminación y exportación de datos
+- [x] Verificar privacidad, eliminación y exportación de datos
 - [x] Ejecutar pruebas unitarias y de flujo completo
 - [x] Guardar checkpoint únicamente después de build y pruebas exitosos
-- [x] Traducir y servir el contenido didáctico real en los 39 idiomas soportados
-- [x] Añadir prueba que confirme que el contenido cambia al cambiar de idioma
+- [ ] Traducir y servir contenido didáctico revisado en los 39 idiomas soportados; el modo local actual sirve el catálogo base en español
+- [ ] Añadir pruebas que confirmen contenido traducido real por idioma cuando existan traducciones revisadas
 
 ## Auditoría Pesada y Rigurosa
 - [x] Inventariar código, rutas, dependencias, esquema y endpoints de producción
@@ -408,7 +408,7 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Aplicar AES-256-GCM al CV sensible con clave gestionada y compatibilidad de migración
 - [ ] Implementar purga GDPR de documentos, solicitudes y objetos almacenados expirados
 - [x] Corregir helpers de transacciones para coincidir con el esquema
-- [ ] Añadir pruebas de regresión de autorización, origin, límites, purga y PDF por propietario
+- [x] Añadir pruebas de regresión de autorización, origin, límites, purga y PDF por propietario
 - [x] Restringir photoUrl al prefijo del usuario autenticado y corregir el patrón real de claves sin extensión
 - [x] Añadir prueba que impida usar una foto perteneciente a otro usuario
 - [x] Exigir autenticación y propiedad en el proxy de objetos bajo users/<id>/
@@ -449,3 +449,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Sanear errores de persistencia de usuario para no registrar objetos o valores de base de datos
 - [x] Retirar afirmaciones absolutas de calidad o cumplimiento de la página pública
 - [x] Consolidar los resultados finales de pruebas, producción y GitHub en la documentación de auditoría
+- [x] Actualizar la auditoría con la cobertura ampliada de exportación y purga de privacidad

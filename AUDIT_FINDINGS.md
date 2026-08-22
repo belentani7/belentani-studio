@@ -59,7 +59,7 @@ La aplicación no debe afirmar que existe un DPD si no hay persona/entidad desig
 | Entrada y abuso | Esquemas estrictos, límites de texto/listas, rate limits para API, fotos, PDF y cursos; mutaciones de usuario con comprobación de mismo origen. | Pruebas de regresión de entrada excesiva, CSRF y autorización. | Implementado técnicamente |
 | Cabeceras | CSP de producción restrictiva, `frame-ancestors 'none'`, `object-src 'none'`, HSTS de Helmet, Referrer-Policy y Permissions-Policy mínima. | Pruebas de regresión de cabeceras. | Implementado técnicamente |
 | Registros | Logs de errores saneados; el helper de auditoría únicamente conserva metadatos técnicos limitados. | Pruebas de auditoría y logs. | Implementado técnicamente |
-| Borrado RGPD | Petición de baja con periodo de gracia y purga diaria autenticada mediante Heartbeat; incluye documentos, reportes y anonimización de cuenta. | Ruta cron, prueba y tarea programada activa. | Implementado técnicamente |
+| Borrado RGPD | Petición de baja con periodo de gracia y purga diaria autenticada mediante Heartbeat; incluye documentos, reportes y anonimización de cuenta. | Ruta cron y regresiones de archivo, purga, anonimización y autorización de la tarea. | Implementado técnicamente |
 | IA y coste | El proveedor predeterminado es local/determinista; la integración externa es opcional y revierte al modo local en error. El catálogo educativo tampoco llama por defecto a un proveedor. | Pruebas de fallback y catálogo local. | Implementado técnicamente |
 | Dependencias y secretos | Auditoría de producción sin vulnerabilidades conocidas y escaneo de archivos e historial Git sin patrones comunes de claves. | `pnpm audit --prod --audit-level=high` y escaneo no revelador. | Verificado en esta revisión |
 | Operación | `/api/health` devuelve señal mínima sin configuración; métricas globales excluyen usuarios, CVs, prompts y documentos. | Comprobación en ejecución y migración de tabla. | Implementado técnicamente |
@@ -69,7 +69,7 @@ La aplicación no debe afirmar que existe un DPD si no hay persona/entidad desig
 | Comprobación | Resultado |
 | --- | --- |
 | Análisis de tipos | `pnpm check` correcto. |
-| Suite de regresión | 16 archivos y **38 pruebas** correctas en la última ejecución. |
+| Suite de regresión | 17 archivos y **40 pruebas** correctas en la última ejecución, incluidas regresiones de archivo, exportación y purga de privacidad. |
 | Build de producción | `pnpm build` correcto. El bundle inicial bajó a 647.67 kB (191.40 kB gzip) y las rutas secundarias se emiten como chunks; aún conserva un aviso de tamaño superior a 500 kB, que es una mejora de rendimiento pendiente, no un fallo de compilación. |
 | Dependencias de producción | Sin vulnerabilidades conocidas en el último `pnpm audit --prod --audit-level=high`. |
 | Vista móvil | Landing, cursos y formulario guiado revisados a 375 × 812 px; la navegación pública se corrigió para no solaparse. |
