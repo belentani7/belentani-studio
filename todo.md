@@ -443,3 +443,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Endurecer CSP, permisos del navegador y políticas de referencia en producción
 - [x] Exigir mismo origen en mutaciones de API de usuario para reducir el riesgo CSRF
 - [x] Actualizar el informe de auditoría con controles verificados, límites y pendientes reales
+- [x] Añadir guardado y recuperación opcional de borrador local, sin incluir la foto ni activar almacenamiento por defecto

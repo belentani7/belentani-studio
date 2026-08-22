@@ -25,28 +25,31 @@ type CVForm = {
 const emptyExperience = (): Experience => ({ company: "", position: "", duration: "", description: "" });
 const emptyEducation = (): Education => ({ school: "", degree: "", year: "" });
 const steps = ["Datos", "Experiencia", "Formación", "Revisión"];
+const DRAFT_KEY = "belentani.cv-draft.v1";
+const emptyForm = (): CVForm => ({ fullName: "", email: "", phone: "", location: "", summary: "", experience: [emptyExperience()], education: [emptyEducation()], skills: [], photoUrl: "" });
+const shortText = (value: unknown, limit: number) => typeof value === "string" ? value.slice(0, limit) : "";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [skillsText, setSkillsText] = useState("");
-  const [formData, setFormData] = useState<CVForm>({
-    fullName: "",
-    email: "",
-    phone: "",
-    location: "",
-    summary: "",
-    experience: [emptyExperience()],
-    education: [emptyEducation()],
-    skills: [],
-    photoUrl: "",
-  });
+  const [formData, setFormData] = useState<CVForm>(emptyForm);
+  const [saveDraft, setSaveDraft] = useState(false);
   const generateCV = trpc.cv.generate.useMutation();
   const listCVs = trpc.cv.list.useQuery();
 
   useEffect(() => {
     if (user?.email && !formData.email) setFormData((current) => ({ ...current, email: user.email ?? "" }));
   }, [user?.email, formData.email]);
+
+  useEffect(() => {
+    if (!saveDraft) return;
+    const timer = window.setTimeout(() => {
+      const draft = { ...formData, photoUrl: "", skillsText };
+      window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    }, 500);
+    return () => window.clearTimeout(timer);
+  }, [formData, saveDraft, skillsText]);
 
   const completedSections = useMemo(() => ({
     personal: Boolean(formData.fullName.trim() && formData.email.trim()),
@@ -61,6 +64,33 @@ export default function Dashboard() {
   };
   const updateEducation = (index: number, key: keyof Education, value: string) => {
     setFormData((current) => ({ ...current, education: current.education.map((item, i) => i === index ? { ...item, [key]: value } : item) }));
+  };
+
+  const restoreDraft = () => {
+    try {
+      const raw = window.localStorage.getItem(DRAFT_KEY);
+      if (!raw) return toast.message("No hay un borrador guardado en este dispositivo");
+      const draft = JSON.parse(raw) as Partial<CVForm> & { skillsText?: unknown };
+      setFormData({
+        fullName: shortText(draft.fullName, 120), email: shortText(draft.email, 320), phone: shortText(draft.phone, 40), location: shortText(draft.location, 160), summary: shortText(draft.summary, 2500), photoUrl: "",
+        experience: Array.isArray(draft.experience) ? draft.experience.slice(0, 12).map((item) => ({ company: shortText(item?.company, 160), position: shortText(item?.position, 160), duration: shortText(item?.duration, 80), description: shortText(item?.description, 1800) })) : [emptyExperience()],
+        education: Array.isArray(draft.education) ? draft.education.slice(0, 8).map((item) => ({ school: shortText(item?.school, 160), degree: shortText(item?.degree, 160), year: shortText(item?.year, 40) })) : [emptyEducation()],
+        skills: Array.isArray(draft.skills) ? draft.skills.slice(0, 30).map((skill) => shortText(skill, 80)).filter(Boolean) : [],
+      });
+      setSkillsText(shortText(draft.skillsText, 2400));
+      setSaveDraft(true);
+      setStep(0);
+      toast.success("Borrador recuperado. Por privacidad, tendrás que volver a subir la foto.");
+    } catch {
+      window.localStorage.removeItem(DRAFT_KEY);
+      toast.error("El borrador local no se pudo recuperar y se ha eliminado");
+    }
+  };
+
+  const clearDraft = () => {
+    window.localStorage.removeItem(DRAFT_KEY);
+    setSaveDraft(false);
+    toast.success("Borrador local eliminado de este dispositivo");
   };
 
   const goNext = () => {
@@ -108,6 +138,10 @@ export default function Dashboard() {
     };
     try {
       await generateCV.mutateAsync(payload);
+      window.localStorage.removeItem(DRAFT_KEY);
+      setSaveDraft(false);
+      setFormData(emptyForm());
+      setSkillsText("");
       toast.success("CV generado gratis en modo local. Ya puedes descargarlo desde Mis CVs");
       setStep(0);
       await listCVs.refetch();
@@ -123,6 +157,11 @@ export default function Dashboard() {
           <div><p className="text-sm font-semibold text-blue-700">Belentani · Herramienta gratuita</p><h1 className="text-3xl font-bold text-slate-950 md:text-4xl">Crea tu CV paso a paso</h1></div>
           <div className="rounded-xl bg-white px-4 py-3 text-sm shadow-sm"><strong>{user?.name || "Tu cuenta"}</strong><span className="ml-2 text-slate-500">{user?.email || ""}</span></div>
         </header>
+
+        <div className="mb-5 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <label className="flex cursor-pointer items-start gap-3"><input className="mt-1 h-4 w-4" type="checkbox" checked={saveDraft} onChange={(event) => setSaveDraft(event.target.checked)} /><span><strong>Guardar borrador en este dispositivo</strong><span className="mt-1 block text-slate-600">Es opcional, no guarda la foto y puedes borrarlo cuando quieras.</span></span></label>
+          <div className="flex gap-2"><Button type="button" size="sm" variant="outline" onClick={restoreDraft}>Recuperar</Button>{saveDraft && <Button type="button" size="sm" variant="ghost" onClick={clearDraft}>Borrar</Button>}</div>
+        </div>
 
         <div className="mb-8 grid grid-cols-4 gap-2" aria-label="Progreso del formulario">
           {steps.map((label, index) => <button key={label} type="button" onClick={() => index <= step && setStep(index)} className={`rounded-lg px-2 py-3 text-xs font-semibold transition md:text-sm ${index === step ? "bg-blue-700 text-white" : index < step ? "bg-blue-100 text-blue-800" : "bg-white text-slate-500"}`}><span className="mr-1">{index < step ? "✓" : index + 1}</span>{label}</button>)}
