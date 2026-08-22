@@ -6,7 +6,7 @@ export type EncryptedCvEnvelope = {
   payload: string;
 };
 
-function isEncryptedCvEnvelope(value: unknown): value is EncryptedCvEnvelope {
+export function isEncryptedCvEnvelope(value: unknown): value is EncryptedCvEnvelope {
   if (!value || typeof value !== "object") return false;
   const candidate = value as Partial<EncryptedCvEnvelope>;
   return candidate.version === "cv-v1" && candidate.algorithm === "AES-256-GCM" && typeof candidate.payload === "string";

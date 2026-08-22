@@ -1,8 +1,8 @@
-import { and, eq, desc, isNull, lt } from "drizzle-orm";
+import { and, eq, desc, isNull, lt, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, documents, transactions, qualityReports, privacyRequests, auditLogs } from "../drizzle/schema";
 import { ENV } from './_core/env';
-import { decryptCVData, encryptCVData } from "./_core/cvCrypto";
+import { decryptCVData, encryptCVData, isEncryptedCvEnvelope } from "./_core/cvCrypto";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -106,6 +106,33 @@ export async function createDocument(userId: number, title: string, cvData: any)
   if (!db) return null;
   const result = await db.insert(documents).values({ userId, title, cvData: encryptCVData(cvData), status: "generated" } as any);
   return (result as any)[0]?.insertId;
+}
+
+/** Migrates a bounded batch of legacy JSON CVs without logging document contents. */
+export async function migrateLegacyCVData(batchSize = 100) {
+  const db = await getDb();
+  if (!db) return { scanned: 0, migrated: 0, failed: 0 };
+  const safeBatchSize = Math.max(1, Math.min(Math.floor(batchSize), 250));
+  const rows = await db.select({ id: documents.id, cvData: documents.cvData })
+    .from(documents)
+    .where(sql`COALESCE(JSON_UNQUOTE(JSON_EXTRACT(${documents.cvData}, '$.version')), '') <> 'cv-v1'`)
+    .limit(safeBatchSize);
+
+  let migrated = 0;
+  let failed = 0;
+  for (const document of rows) {
+    if (isEncryptedCvEnvelope(document.cvData)) continue;
+    try {
+      await db.update(documents)
+        .set({ cvData: encryptCVData(document.cvData) } as any)
+        .where(eq(documents.id, document.id));
+      migrated += 1;
+    } catch {
+      failed += 1;
+      console.error(`[CV encryption migration] document ${document.id} failed`);
+    }
+  }
+  return { scanned: rows.length, migrated, failed };
 }
 
 export async function createTransaction(userId: number, amount: string, stripePaymentId: string, stripeChargeId?: string) {

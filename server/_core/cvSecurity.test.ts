@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decryptCVData, encryptCVData } from "./cvCrypto";
+import { decryptCVData, encryptCVData, isEncryptedCvEnvelope } from "./cvCrypto";
 import { CVInputSchema, sanitizeInlineText, sanitizeMultilineText } from "./cvValidation";
 
 describe("protección de datos de CV", () => {
@@ -8,6 +8,8 @@ describe("protección de datos de CV", () => {
     const stored = encryptCVData(original);
     expect(stored.algorithm).toBe("AES-256-GCM");
     expect(stored.payload).not.toContain("ana@example.com");
+    expect(isEncryptedCvEnvelope(stored)).toBe(true);
+    expect(isEncryptedCvEnvelope(original)).toBe(false);
     expect(decryptCVData<typeof original>(stored)).toEqual(original);
   });
 
