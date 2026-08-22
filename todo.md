@@ -439,3 +439,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Reducir registros de errores que puedan incluir datos personales o respuestas de proveedores
 - [x] Corregir el helper de auditoría para que use únicamente campos existentes y detalles no sensibles
 - [x] Registrar métricas técnicas de operación y coste estimado sin contenido de CV ni prompts
+- [x] Corregir la navegación pública en móvil para evitar solapamientos y controles cortados

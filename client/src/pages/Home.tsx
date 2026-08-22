@@ -13,15 +13,15 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:py-4">
           <div className="flex items-center gap-2">
             <FileText className="w-6 h-6 text-blue-600" />
             <span className="font-bold text-xl text-slate-900">Belentani</span>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard"><Button variant="outline">Mi Panel</Button></Link>
-            <Link href="/courses"><Button variant="outline">Cursos</Button></Link>
-            <a href={getLoginUrl()}><Button>Acceder / Registrarse</Button></a>
+          <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:items-center sm:gap-4">
+            <Link href="/dashboard"><Button variant="outline" className="w-full px-2 text-xs sm:w-auto sm:px-4 sm:text-sm">Mi Panel</Button></Link>
+            <Link href="/courses"><Button variant="outline" className="w-full px-2 text-xs sm:w-auto sm:px-4 sm:text-sm">Cursos</Button></Link>
+            <a href={getLoginUrl()}><Button className="w-full px-2 text-xs sm:w-auto sm:px-4 sm:text-sm">Acceder</Button></a>
           </div>
         </div>
       </nav>
