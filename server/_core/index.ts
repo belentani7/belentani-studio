@@ -91,6 +91,9 @@ async function startServer() {
       const pdf = await generateCVPDF({ ...cvData, photoBuffer });
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", `attachment; filename="belentani-cv-${documentId}.pdf"`);
+      res.setHeader("Cache-Control", "private, no-store, max-age=0, must-revalidate");
+      res.setHeader("Pragma", "no-cache");
+      res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
       return res.send(pdf);
     } catch (error) {
       console.error("[PDF]", error);

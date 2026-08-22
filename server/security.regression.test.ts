@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { appRouter, getSafeOrigin } from "./routers";
 import type { TrpcContext } from "./_core/context";
+import { readFileSync } from "node:fs";
+
+const serverSource = readFileSync(new URL("./_core/index.ts", import.meta.url), "utf8");
 
 const ctx = (): TrpcContext => ({
   user: { id: 101, openId: "audit-user", name: "Audit User", email: "audit@example.com", loginMethod: "test", role: "user", creditsBalance: "0", createdAt: new Date(), updatedAt: new Date(), lastSignedIn: new Date() },
@@ -25,5 +28,10 @@ describe("auditoría de regresión", () => {
 
   it("rechaza una foto almacenada bajo otro usuario", async () => {
     await expect(appRouter.createCaller(ctx()).cv.generate({ fullName: "Persona válida", email: "audit@example.com", experience: [], education: [], skills: [], photoUrl: "/manus-storage/users/202/photo_abcd1234" })).rejects.toThrow(/Foto no perteneciente/);
+  });
+
+  it("marca los PDF privados como no cacheables y no indexables", () => {
+    expect(serverSource).toContain('res.setHeader("Cache-Control", "private, no-store, max-age=0, must-revalidate")');
+    expect(serverSource).toContain('res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive")');
   });
 });
