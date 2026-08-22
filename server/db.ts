@@ -2,6 +2,7 @@ import { and, eq, desc, isNull, lt } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, documents, transactions, qualityReports, privacyRequests, auditLogs } from "../drizzle/schema";
 import { ENV } from './_core/env';
+import { decryptCVData, encryptCVData } from "./_core/cvCrypto";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -71,10 +72,16 @@ export async function getUserByOpenId(openId: string) {
   return result[0];
 }
 
-export async function getUserDocuments(userId: number) {
+function withDecryptedCvData<T extends { cvData: unknown }>(document: T): T {
+  return { ...document, cvData: decryptCVData(document.cvData) };
+}
+
+export async function getUserDocuments(userId: number, includeCvData = false) {
   const db = await getDb();
   if (!db) return [];
-  return await db.select().from(documents).where(and(eq(documents.userId, userId), isNull(documents.deletedAt))).orderBy(desc(documents.createdAt));
+  const rows = await db.select().from(documents).where(and(eq(documents.userId, userId), isNull(documents.deletedAt))).orderBy(desc(documents.createdAt));
+  if (includeCvData) return rows.map(withDecryptedCvData);
+  return rows.map(({ cvData: _cvData, pdfUrl: _pdfUrl, ...document }) => document);
 }
 
 export async function getDocumentById(documentId: number, userId: number) {
@@ -82,7 +89,7 @@ export async function getDocumentById(documentId: number, userId: number) {
   if (!db) return undefined;
   const result = await db.select().from(documents).where(eq(documents.id, documentId)).limit(1);
   const document = result[0];
-  return document?.userId === userId && !document.deletedAt ? document : undefined;
+  return document?.userId === userId && !document.deletedAt ? withDecryptedCvData(document) : undefined;
 }
 
 export async function setDocumentPdfUrl(documentId: number, userId: number, pdfUrl: string) {
@@ -97,7 +104,7 @@ export async function setDocumentPdfUrl(documentId: number, userId: number, pdfU
 export async function createDocument(userId: number, title: string, cvData: any) {
   const db = await getDb();
   if (!db) return null;
-  const result = await db.insert(documents).values({ userId, title, cvData, status: "generated" } as any);
+  const result = await db.insert(documents).values({ userId, title, cvData: encryptCVData(cvData), status: "generated" } as any);
   return (result as any)[0]?.insertId;
 }
 
@@ -150,6 +157,7 @@ export async function purgeExpiredPrivacyData(now = new Date()) {
   for (const request of expired) {
     await db.delete(qualityReports).where(eq(qualityReports.userId, request.userId));
     await db.delete(documents).where(eq(documents.userId, request.userId));
+    await db.update(auditLogs).set({ userId: null, ipAddress: null, userAgent: null, details: null }).where(eq(auditLogs.userId, request.userId));
     await db.update(users).set({ openId: `deleted-${request.userId}-${request.id}`, name: null, email: null, loginMethod: "deleted" }).where(eq(users.id, request.userId));
     await db.update(privacyRequests).set({ status: "completed", completedAt: now }).where(eq(privacyRequests.id, request.id));
     processed += 1;

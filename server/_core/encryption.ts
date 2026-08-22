@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 const KEY_BYTES = 32;
 const IV_BYTES = 12;
@@ -7,7 +7,17 @@ const TAG_BYTES = 16;
 function getEncryptionKey(): Buffer {
   const raw = process.env.ENCRYPTION_KEY;
   if (raw && /^[0-9a-fA-F]{64}$/.test(raw)) return Buffer.from(raw, "hex");
-  if (process.env.NODE_ENV === "production") throw new Error("ENCRYPTION_KEY must be a 64-character hexadecimal AES-256 key in production");
+  const sessionRootKey = process.env.JWT_SECRET;
+  if (sessionRootKey && sessionRootKey.length >= 32) {
+    return Buffer.from(crypto.hkdfSync(
+      "sha256",
+      Buffer.from(sessionRootKey, "utf8"),
+      Buffer.from("belentani-cv-encryption-v1", "utf8"),
+      Buffer.from("aes-256-gcm-cv-data", "utf8"),
+      KEY_BYTES,
+    ));
+  }
+  if (process.env.NODE_ENV === "production") throw new Error("A production encryption root key is required");
   return crypto.createHash("sha256").update("belentani-development-only-key").digest().subarray(0, KEY_BYTES);
 }
 
@@ -38,5 +48,6 @@ export function hashPassword(password: string): string {
 }
 
 export function verifyPassword(password: string, hash: string): boolean {
+  if (!/^[a-f0-9]{64}$/i.test(hash)) return false;
   return crypto.timingSafeEqual(Buffer.from(hashPassword(password), "hex"), Buffer.from(hash, "hex"));
 }

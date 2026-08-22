@@ -11,7 +11,7 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
-import { getDocumentById, setDocumentPdfUrl, purgeExpiredPrivacyData } from "../db";
+import { getDocumentById, purgeExpiredPrivacyData } from "../db";
 import { sdk } from "./sdk";
 import { storagePut, storageGetSignedUrl } from "../storage";
 import { generateCVPDF } from "./pdfGenerator";
@@ -38,6 +38,7 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 
 const apiLimiter = rateLimit({ windowMs: 60 * 1000, limit: 120, standardHeaders: "draft-8", legacyHeaders: false, message: { error: "Demasiadas solicitudes; inténtalo de nuevo más tarde." } });
 const photoLimiter = rateLimit({ windowMs: 10 * 60 * 1000, limit: 10, standardHeaders: "draft-8", legacyHeaders: false, message: { error: "Límite de subidas alcanzado; inténtalo más tarde." } });
+const pdfLimiter = rateLimit({ windowMs: 10 * 60 * 1000, limit: 20, standardHeaders: "draft-8", legacyHeaders: false, message: { error: "Límite de descargas alcanzado; inténtalo más tarde." } });
 const courseLimiter = rateLimit({ windowMs: 60 * 1000, limit: 30, standardHeaders: "draft-8", legacyHeaders: false, message: { error: "Límite de traducciones alcanzado; inténtalo más tarde." } });
 
 async function startServer() {
@@ -71,7 +72,7 @@ async function startServer() {
     }
   });
 
-  app.get("/api/cv/:documentId/pdf", async (req, res) => {
+  app.get("/api/cv/:documentId/pdf", pdfLimiter, async (req, res) => {
     try {
       const ctx = await createContext({ req, res } as any);
       if (!ctx.user) return res.status(401).json({ error: "No autenticado" });
@@ -88,8 +89,6 @@ async function startServer() {
         if (photoResponse.ok) photoBuffer = Buffer.from(await photoResponse.arrayBuffer());
       }
       const pdf = await generateCVPDF({ ...cvData, photoBuffer });
-      const stored = await storagePut(`users/${ctx.user.id}/cv-${documentId}.pdf`, pdf, "application/pdf");
-      await setDocumentPdfUrl(documentId, ctx.user.id, stored.url);
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", `attachment; filename="belentani-cv-${documentId}.pdf"`);
       return res.send(pdf);

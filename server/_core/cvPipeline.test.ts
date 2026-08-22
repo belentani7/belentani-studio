@@ -18,4 +18,10 @@ describe("CV pipeline", () => {
     expect(pdf.subarray(0, 5).toString()).toBe("%PDF-");
     expect(pdf.length).toBeGreaterThan(1000);
   });
+
+  it("mantiene el modo local cuando el proveedor no entrega una mejora utilizable", async () => {
+    invokeLLMMock.mockResolvedValue({ choices: [{ message: { content: "respuesta no estructurada" } }] });
+    const input = { fullName: "Persona", email: "persona@example.com", summary: "Perfil inicial", experience: [], education: [], skills: ["Informática"] };
+    await expect(enhanceCVWithAI(input)).resolves.toEqual(input);
+  });
 });

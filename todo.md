@@ -403,9 +403,9 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Validar y allowlistear Origin/URLs en donaciones Stripe y limitar cantidades
 - [x] Comprobar propiedad del documento antes de crear un quality report
 - [x] Añadir rate limiting y cabeceras HTTP de seguridad
-- [ ] Validar límites estrictos de CV y sanitizar entradas del backend
+- [x] Validar límites estrictos de CV y sanitizar entradas del backend
 - [x] Validar, re-encodear fotos con Sharp y restringir claves de storage al usuario
-- [ ] Migrar cifrado a AES-256-GCM con clave obligatoria y aplicarlo al CV sensible
+- [x] Aplicar AES-256-GCM al CV sensible con clave gestionada y compatibilidad de migración
 - [ ] Implementar purga GDPR de documentos, solicitudes y objetos almacenados expirados
 - [x] Corregir helpers de transacciones para coincidir con el esquema
 - [ ] Añadir pruebas de regresión de autorización, origin, límites, purga y PDF por propietario
@@ -416,3 +416,15 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Comprobar estado de Git y exclusión de secretos (.gitignore)
 - [x] Crear repositorio privado o público en GitHub mediante gh CLI
 - [x] Subir la rama principal con los cambios verificados
+
+## Auditoría de Versiones y Mejoras Integradas
+- [x] Localizar fuentes e inventariar las dos versiones (versión Node/Express monorepo vs versión ZIP frontend Next.js)
+- [x] Analizar diferencias arquitectónicas, seguridad, IA y manejo de PDF/foto
+- [x] Aplicar mejoras de usabilidad y robustez identificadas
+- [ ] Ejecutar tests, build, verificación de producción y sincronización en GitHub
+
+## Endurecimiento posterior a auditoría de versiones
+- [x] Aplicar sanitización determinista y límites de negocio al contrato de CV antes de llamar a la IA
+- [x] Cifrar el contenido persistido del CV con AES-256-GCM y descifrarlo solo en exportación/PDF
+- [x] Añadir pruebas de cifrado de CV, sanitización y ownership del PDF
+- [x] Verificar y documentar el endpoint de purga GDPR sin cambiar el esquema de forma destructiva
