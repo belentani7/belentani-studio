@@ -95,6 +95,21 @@ export const auditLogs = mysqlTable("auditLogs", {
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type InsertAuditLog = typeof auditLogs.$inferInsert;
 
+/** Aggregateable operational events; deliberately excludes user IDs and document contents. */
+export const operationMetrics = mysqlTable("operationMetrics", {
+  id: int("id").autoincrement().primaryKey(),
+  operation: varchar("operation", { length: 64 }).notNull(),
+  provider: varchar("provider", { length: 64 }).notNull(),
+  estimatedCostMicros: int("estimatedCostMicros").notNull().default(0),
+  inputBytes: int("inputBytes").notNull().default(0),
+  outputBytes: int("outputBytes").notNull().default(0),
+  status: mysqlEnum("status", ["success", "failure"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type OperationMetric = typeof operationMetrics.$inferSelect;
+export type InsertOperationMetric = typeof operationMetrics.$inferInsert;
+
 /**
  * Privacy Requests table: tracks GDPR DSAR and deletion requests
  */

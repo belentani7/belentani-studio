@@ -1,6 +1,6 @@
 import { and, eq, desc, isNull, lt, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, documents, transactions, qualityReports, privacyRequests, auditLogs } from "../drizzle/schema";
+import { InsertUser, users, documents, transactions, qualityReports, privacyRequests, auditLogs, operationMetrics } from "../drizzle/schema";
 import { ENV } from './_core/env';
 import { decryptCVData, encryptCVData, isEncryptedCvEnvelope } from "./_core/cvCrypto";
 
@@ -106,6 +106,24 @@ export async function createDocument(userId: number, title: string, cvData: any)
   if (!db) return null;
   const result = await db.insert(documents).values({ userId, title, cvData: encryptCVData(cvData), status: "generated" } as any);
   return (result as any)[0]?.insertId;
+}
+
+export async function recordOperationMetric(metric: { operation: string; provider: string; estimatedCostMicros?: number; inputBytes?: number; outputBytes?: number; status: "success" | "failure" }) {
+  const db = await getDb();
+  if (!db) return;
+  const safeInteger = (value: number | undefined, maximum: number) => Number.isSafeInteger(value) && (value ?? 0) >= 0 ? Math.min(value ?? 0, maximum) : 0;
+  try {
+    await db.insert(operationMetrics).values({
+      operation: metric.operation.slice(0, 64),
+      provider: metric.provider.slice(0, 64),
+      estimatedCostMicros: safeInteger(metric.estimatedCostMicros, 1_000_000_000),
+      inputBytes: safeInteger(metric.inputBytes, 1_000_000),
+      outputBytes: safeInteger(metric.outputBytes, 50 * 1024 * 1024),
+      status: metric.status,
+    });
+  } catch {
+    console.error("[Metrics] write failed");
+  }
 }
 
 /** Migrates a bounded batch of legacy JSON CVs without logging document contents. */

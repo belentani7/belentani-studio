@@ -22,6 +22,13 @@
       "when": 1783163447725,
       "tag": "0002_handy_bug",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1787388253342,
+      "tag": "0003_typical_proteus",
+      "breakpoints": true
     }
   ]
 }

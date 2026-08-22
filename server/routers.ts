@@ -3,9 +3,9 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { getUserDocuments, getDocumentById, createDocument, createQualityReport, getQualityReports, getUserTransactions, getUserAuditLogs, getUserPrivacyRequests, requestAccountDeletion } from "./db";
+import { getUserDocuments, getDocumentById, createDocument, createQualityReport, getQualityReports, getUserTransactions, getUserAuditLogs, getUserPrivacyRequests, requestAccountDeletion, recordOperationMetric } from "./db";
 import Stripe from "stripe";
-import { enhanceCV } from "./_core/cvPipeline";
+import { enhanceCV, getCVProviderStatus } from "./_core/cvPipeline";
 import { CVInputSchema } from "./_core/cvValidation";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
@@ -36,8 +36,18 @@ export const appRouter = router({
       .input(CVInputSchema)
       .mutation(async ({ ctx, input }) => {
         if (input.photoUrl && !input.photoUrl.startsWith(`/manus-storage/users/${ctx.user.id}/photo_`)) throw new Error("Foto no perteneciente al usuario");
-        const enhanced = await enhanceCV(input);
-        const docId = await createDocument(ctx.user.id, "CV profesional", enhanced);
+        const provider = getCVProviderStatus();
+        const inputBytes = Buffer.byteLength(JSON.stringify(input), "utf8");
+        let docId: number | null = null;
+        try {
+          const enhanced = await enhanceCV(input);
+          docId = await createDocument(ctx.user.id, "CV profesional", enhanced);
+          if (!docId) throw new Error("No se pudo guardar el CV");
+          await recordOperationMetric({ operation: "cv_generated", provider: provider.id, estimatedCostMicros: 0, inputBytes, outputBytes: 0, status: "success" });
+        } catch {
+          await recordOperationMetric({ operation: "cv_generated", provider: provider.id, estimatedCostMicros: 0, inputBytes, outputBytes: 0, status: "failure" });
+          throw new Error("No se pudo crear el CV");
+        }
         return { success: true, documentId: docId };
       }),
 
