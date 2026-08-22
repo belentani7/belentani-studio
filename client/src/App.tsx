@@ -6,6 +6,8 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import CookieBanner from "./components/CookieBanner";
+import BelentaniAtmosphere from "./components/BelentaniAtmosphere";
+import "./belentani-atmosphere.css";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Courses = lazy(() => import("./pages/Courses"));
@@ -40,9 +42,12 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
-          <Toaster />
-          <Router />
-          <CookieBanner />
+          <BelentaniAtmosphere />
+          <div className="belentani-studio-content">
+            <Toaster />
+            <Router />
+            <CookieBanner />
+          </div>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
