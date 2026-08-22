@@ -12,7 +12,25 @@ export type CVInput = {
   photoUrl?: string;
 };
 
-export async function enhanceCVWithAI(input: CVInput): Promise<CVInput> {
+export type CVEnhancementMode = "local" | "ai";
+
+export function getCVEnhancementMode(): CVEnhancementMode {
+  return process.env.CV_ENHANCEMENT_MODE?.toLowerCase() === "ai" ? "ai" : "local";
+}
+
+export function enhanceCVLocally(input: CVInput): CVInput {
+  if (input.summary?.trim()) return input;
+  const skills = input.skills.slice(0, 3).join(", ");
+  const positions = Array.from(new Set(input.experience.map((item) => item.position).filter(Boolean))).slice(0, 2).join(" y ");
+  const fragments = [
+    positions ? `Perfil con experiencia en ${positions}.` : "Perfil profesional en preparación.",
+    skills ? `Habilidades declaradas: ${skills}.` : "",
+  ].filter(Boolean);
+  return { ...input, summary: fragments.join(" ") };
+}
+
+export async function enhanceCV(input: CVInput): Promise<CVInput> {
+  if (getCVEnhancementMode() === "local") return enhanceCVLocally(input);
   try {
     const response = await invokeLLM({
       model: "gpt-5-mini",
@@ -34,7 +52,7 @@ export async function enhanceCVWithAI(input: CVInput): Promise<CVInput> {
     const enhanced = JSON.parse(typeof content === "string" ? content : "{}");
     return { ...input, summary: enhanced.summary || input.summary || "", experience: enhanced.experience?.length ? enhanced.experience : input.experience };
   } catch {
-    // Modo local: los datos ya validados siguen siendo suficientes para PDF.
-    return input;
+    // La caída del proveedor nunca bloquea un CV gratuito.
+    return enhanceCVLocally(input);
   }
 }

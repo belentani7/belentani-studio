@@ -431,3 +431,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Verificar y documentar el endpoint de purga GDPR sin cambiar el esquema de forma destructiva
 - [x] Programar la purga GDPR diaria en producción mediante Heartbeat
 - [x] Migrar de forma acotada los CVs históricos que aún estén en texto plano al sobre cifrado
+- [x] Activar un modo local gratuito que genere el CV sin llamadas a un proveedor de IA

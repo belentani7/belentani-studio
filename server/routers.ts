@@ -5,7 +5,7 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getUserDocuments, getDocumentById, createDocument, createQualityReport, getQualityReports, getUserTransactions, getUserAuditLogs, getUserPrivacyRequests, requestAccountDeletion } from "./db";
 import Stripe from "stripe";
-import { enhanceCVWithAI } from "./_core/cvPipeline";
+import { enhanceCV } from "./_core/cvPipeline";
 import { CVInputSchema } from "./_core/cvValidation";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
@@ -36,7 +36,7 @@ export const appRouter = router({
       .input(CVInputSchema)
       .mutation(async ({ ctx, input }) => {
         if (input.photoUrl && !input.photoUrl.startsWith(`/manus-storage/users/${ctx.user.id}/photo_`)) throw new Error("Foto no perteneciente al usuario");
-        const enhanced = await enhanceCVWithAI(input);
+        const enhanced = await enhanceCV(input);
         const docId = await createDocument(ctx.user.id, "CV profesional", enhanced);
         return { success: true, documentId: docId };
       }),

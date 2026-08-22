@@ -36,4 +36,6 @@ Después, la tarea `belentani-cv-encryption-migration` se ejecuta a las 03:05 UT
 
 La derivación HKDF desde `JWT_SECRET` permite operar sin una nueva clave manual, pero una futura rotación de ese secreto requiere un plan de migración/re-cifrado de los CV. Para una separación de claves y rotación independiente, se recomienda configurar posteriormente `ENCRYPTION_KEY` como secreto de 32 bytes hexadecimal.
 
+El modo de generación predeterminado es `local`, por lo que no llama a ningún proveedor de IA ni consume créditos. La opción `CV_ENHANCEMENT_MODE=ai` permite habilitar el proveedor integrado en una futura operación consciente de coste; si no responde, el sistema vuelve al modo local.
+
 Estos controles reducen riesgos técnicos comprobados, pero no sustituyen una evaluación jurídica, un acuerdo de encargados, la gestión de brechas o un análisis de impacto cuando sea exigible.
