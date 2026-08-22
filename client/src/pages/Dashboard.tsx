@@ -29,6 +29,31 @@ const DRAFT_KEY = "belentani.cv-draft.v1";
 const emptyForm = (): CVForm => ({ fullName: "", email: "", phone: "", location: "", summary: "", experience: [emptyExperience()], education: [emptyEducation()], skills: [], photoUrl: "" });
 const shortText = (value: unknown, limit: number) => typeof value === "string" ? value.slice(0, limit) : "";
 
+function CVIssueReporter({ documents }: { documents: Array<{ id: number; title: string }> }) {
+  const reportQuality = trpc.quality.report.useMutation();
+  const [documentId, setDocumentId] = useState(0);
+  const [issue, setIssue] = useState("");
+  const selectedId = documentId || documents[0]?.id || 0;
+
+  if (documents.length === 0) return null;
+
+  const submitReport = async () => {
+    if (!issue.trim()) {
+      toast.error("Describe brevemente el problema antes de enviarlo");
+      return;
+    }
+    try {
+      await reportQuality.mutateAsync({ documentId: selectedId, issue: issue.trim() });
+      setIssue("");
+      toast.success("Incidencia registrada. El modo gratuito no promete una revisión automática ni un CV adicional; el equipo podrá valorar tu informe.");
+    } catch {
+      toast.error("No se pudo registrar la incidencia. Comprueba el CV seleccionado e inténtalo de nuevo.");
+    }
+  };
+
+  return <Card className="mt-6 p-5"><h2 className="text-xl font-bold">¿Hay un problema con un CV?</h2><p className="mt-2 text-sm text-slate-600">Puedes informar de un error concreto de uno de tus documentos. Solo se acepta el identificador de un CV de tu cuenta y el texto se limita para reducir datos innecesarios.</p><label className="mt-4 block text-sm font-medium" htmlFor="issue-document">CV</label><select id="issue-document" className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900" value={String(selectedId)} onChange={(event) => setDocumentId(Number(event.target.value))} disabled={reportQuality.isPending}>{documents.map((document) => <option key={document.id} value={document.id}>{document.title}</option>)}</select><label className="mt-4 block text-sm font-medium" htmlFor="issue-detail">Problema observado</label><Textarea id="issue-detail" className="mt-1" value={issue} maxLength={4000} onChange={(event) => setIssue(event.target.value)} placeholder="Ej.: el nombre de mi puesto no aparece o hay un dato incorrecto." disabled={reportQuality.isPending} /><Button className="mt-4" variant="outline" onClick={submitReport} disabled={reportQuality.isPending}>{reportQuality.isPending ? "Enviando…" : "Enviar incidencia"}</Button></Card>;
+}
+
 export default function Dashboard() {
   const { user } = useAuth();
   const [step, setStep] = useState(0);
@@ -190,6 +215,7 @@ export default function Dashboard() {
         </div>
 
         <section className="mt-10"><h2 className="mb-4 text-2xl font-bold">Mis CVs</h2>{listCVs.isLoading ? <Card className="p-6 text-slate-600">Cargando tus documentos...</Card> : listCVs.data?.length === 0 ? <Card className="p-6 text-slate-600">Todavía no tienes CVs generados.</Card> : <div className="grid gap-4 md:grid-cols-2">{listCVs.data?.map((cv) => <Card key={cv.id} className="flex items-center justify-between gap-4 p-4"><div><p className="font-bold">{cv.title}</p><p className="text-sm text-slate-600">{new Date(cv.createdAt).toLocaleDateString()}</p></div><a className="inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium hover:bg-slate-50" href={`/api/cv/${cv.id}/pdf`}><Download className="mr-2 h-4 w-4" />PDF</a></Card>)}</div>}</section>
+        <CVIssueReporter documents={(listCVs.data ?? []).map((document) => ({ id: document.id, title: document.title }))} />
       </div>
     </div>
   );

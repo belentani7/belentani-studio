@@ -19,4 +19,10 @@ describe("regresión de la integración de versiones", () => {
     expect(serverSource).not.toContain("setDocumentPdfUrl(documentId, ctx.user.id, stored.url)");
     expect(serverSource).not.toContain("storagePut(`users/${ctx.user.id}/cv-${documentId}.pdf`");
   });
+
+  it("permite informar una incidencia de un CV propio sin prometer revisión automática", () => {
+    expect(dashboardSource).toContain("trpc.quality.report.useMutation()");
+    expect(dashboardSource).toContain("El modo gratuito no promete una revisión automática ni un CV adicional");
+    expect(dashboardSource).toContain("documentId: selectedId");
+  });
 });
