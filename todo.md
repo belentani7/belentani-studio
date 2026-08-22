@@ -437,3 +437,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Desacoplar la mejora de CV mediante una abstracción de proveedor local y opcional
 - [x] Añadir endpoint público de salud sin exposición de datos sensibles
 - [x] Reducir registros de errores que puedan incluir datos personales o respuestas de proveedores
+- [x] Corregir el helper de auditoría para que use únicamente campos existentes y detalles no sensibles
