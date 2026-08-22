@@ -69,11 +69,11 @@ La aplicación no debe afirmar que existe un DPD si no hay persona/entidad desig
 | Comprobación | Resultado |
 | --- | --- |
 | Análisis de tipos | `pnpm check` correcto. |
-| Suite de regresión | 14 archivos y **36 pruebas** correctas en la última ejecución. |
-| Build de producción | `pnpm build` correcto. El bundle de cliente conserva un aviso de tamaño superior a 500 kB; es una mejora de rendimiento pendiente, no un fallo de compilación. |
+| Suite de regresión | 16 archivos y **38 pruebas** correctas en la última ejecución. |
+| Build de producción | `pnpm build` correcto. El bundle inicial bajó a 647.67 kB (191.40 kB gzip) y las rutas secundarias se emiten como chunks; aún conserva un aviso de tamaño superior a 500 kB, que es una mejora de rendimiento pendiente, no un fallo de compilación. |
 | Dependencias de producción | Sin vulnerabilidades conocidas en el último `pnpm audit --prod --audit-level=high`. |
 | Vista móvil | Landing, cursos y formulario guiado revisados a 375 × 812 px; la navegación pública se corrigió para no solaparse. |
-| Despliegue | Checkpoints publicados y sincronizados en `belentani7/belentani-studio`. |
+| Despliegue | Landing y `/api/health` verificados en el dominio publicado; CSP, HSTS, Permissions-Policy, Referrer-Policy y `no-store` confirmados por cabeceras. Checkpoints publicados y sincronizados en `belentani7/belentani-studio`. |
 
 ## Matriz de riesgo residual
 
