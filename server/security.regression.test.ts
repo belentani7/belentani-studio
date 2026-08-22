@@ -54,4 +54,10 @@ describe("auditoría de regresión", () => {
     expect(serverSource).toContain('referrerPolicy: { policy: "strict-origin-when-cross-origin" }');
     expect(serverSource).toContain('res.setHeader("Permissions-Policy", "camera=(), geolocation=(), microphone=(), payment=(), usb=()")');
   });
+
+  it("requiere mismo origen para mutaciones de usuario sensibles a CSRF", () => {
+    expect(serverSource).toContain('const unsafeMethods = new Set(["POST", "PUT", "PATCH", "DELETE"])');
+    expect(serverSource).toContain('const userMutation = req.path.startsWith("/api/trpc") || req.path === "/api/cv/photo"');
+    expect(serverSource).toContain('return res.status(403).json({ error: "Origen no permitido" })');
+  });
 });

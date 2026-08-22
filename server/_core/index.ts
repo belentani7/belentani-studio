@@ -40,6 +40,14 @@ const apiLimiter = rateLimit({ windowMs: 60 * 1000, limit: 120, standardHeaders:
 const photoLimiter = rateLimit({ windowMs: 10 * 60 * 1000, limit: 10, standardHeaders: "draft-8", legacyHeaders: false, message: { error: "Límite de subidas alcanzado; inténtalo más tarde." } });
 const pdfLimiter = rateLimit({ windowMs: 10 * 60 * 1000, limit: 20, standardHeaders: "draft-8", legacyHeaders: false, message: { error: "Límite de descargas alcanzado; inténtalo más tarde." } });
 const courseLimiter = rateLimit({ windowMs: 60 * 1000, limit: 30, standardHeaders: "draft-8", legacyHeaders: false, message: { error: "Límite de traducciones alcanzado; inténtalo más tarde." } });
+const unsafeMethods = new Set(["POST", "PUT", "PATCH", "DELETE"]);
+
+function hasSameOrigin(req: express.Request) {
+  const origin = req.get("origin");
+  const host = req.get("host");
+  if (!origin || !host) return false;
+  return origin === `${req.protocol}://${host}`;
+}
 
 async function startServer() {
   const app = express();
@@ -68,6 +76,11 @@ async function startServer() {
   app.use((_req, res, next) => {
     res.setHeader("Permissions-Policy", "camera=(), geolocation=(), microphone=(), payment=(), usb=()");
     next();
+  });
+  app.use((req, res, next) => {
+    const userMutation = req.path.startsWith("/api/trpc") || req.path === "/api/cv/photo";
+    if (!unsafeMethods.has(req.method) || !userMutation || hasSameOrigin(req)) return next();
+    return res.status(403).json({ error: "Origen no permitido" });
   });
   app.use(express.json({ limit: "8mb", strict: true }));
   app.use(express.urlencoded({ limit: "1mb", extended: false }));

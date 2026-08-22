@@ -441,3 +441,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Registrar métricas técnicas de operación y coste estimado sin contenido de CV ni prompts
 - [x] Corregir la navegación pública en móvil para evitar solapamientos y controles cortados
 - [x] Endurecer CSP, permisos del navegador y políticas de referencia en producción
+- [x] Exigir mismo origen en mutaciones de API de usuario para reducir el riesgo CSRF
