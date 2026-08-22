@@ -28,6 +28,8 @@ La solicitud de supresión archiva documentos durante treinta días. El endpoint
 
 La tarea de producción `belentani-gdpr-purge` está activada con la expresión UTC `0 0 3 * * *` (todos los días a las 03:00 UTC) y el identificador de plataforma `2dnhverckRxnyzjErNoHtf`.
 
+Después, la tarea `belentani-cv-encryption-migration` se ejecuta a las 03:05 UTC con `0 5 3 * * *` e identificador `55ob4pRKpeFUE72a8jcSC5`. Migra como máximo 250 CVs antiguos por ejecución, por lo que reduce el impacto sobre la base de datos y se detiene de forma natural cuando no quedan sobres anteriores.
+
 > La interfaz de almacenamiento disponible no ofrece eliminación física directa de objetos. Al purgar se eliminan las referencias y el acceso de aplicación; la retención/borrado físico del proveedor debe configurarse con una política de ciclo de vida cuando la plataforma lo permita.
 
 ## Limitaciones y operación segura
