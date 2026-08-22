@@ -446,3 +446,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Añadir guardado y recuperación opcional de borrador local, sin incluir la foto ni activar almacenamiento por defecto
 - [x] Evitar que activar el guardado local pueda sobrescribir un borrador existente antes de recuperarlo
 - [x] Cargar de forma diferida rutas no iniciales para reducir el bundle de la primera visita
+- [x] Sanear errores de persistencia de usuario para no registrar objetos o valores de base de datos

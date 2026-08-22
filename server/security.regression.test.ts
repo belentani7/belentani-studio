@@ -46,6 +46,9 @@ describe("auditoría de regresión", () => {
     expect(serverSource).not.toContain('console.error("[PDF]", error)');
     const storageProxySource = readFileSync(new URL("./_core/storageProxy.ts", import.meta.url), "utf8");
     expect(storageProxySource).not.toContain("forgeResp.status} ${body}");
+    const dbSource = readFileSync(new URL("./db.ts", import.meta.url), "utf8");
+    expect(dbSource).toContain('console.error("[Database] user upsert failed")');
+    expect(dbSource).not.toContain('console.error("[Database] Failed to upsert user:", error)');
   });
 
   it("declara políticas restrictivas de contenido, referencia y permisos en producción", () => {
