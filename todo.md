@@ -447,3 +447,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Evitar que activar el guardado local pueda sobrescribir un borrador existente antes de recuperarlo
 - [x] Cargar de forma diferida rutas no iniciales para reducir el bundle de la primera visita
 - [x] Sanear errores de persistencia de usuario para no registrar objetos o valores de base de datos
+- [x] Retirar afirmaciones absolutas de calidad o cumplimiento de la página pública

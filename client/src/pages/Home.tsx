@@ -28,7 +28,7 @@ export default function Home() {
 
       <section className="flex-1 max-w-6xl mx-auto px-4 py-20 text-center">
         <div className="mb-8">
-          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">Tu CV Perfecto en Minutos</h1>
+          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">Tu CV profesional, paso a paso</h1>
           <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">Genera tu CV profesional gratis con herramientas locales, aprende informática y mejora tus oportunidades en España. Accesible, con controles de privacidad y pensado para todos.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
@@ -38,7 +38,7 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-8 text-center mb-16">
           <div><div className="text-3xl font-bold text-blue-600">0€</div><p className="text-slate-600">CV y cursos gratis</p></div>
           <div><div className="text-3xl font-bold text-blue-600">39</div><p className="text-slate-600">Idiomas preparados</p></div>
-          <div><div className="text-3xl font-bold text-blue-600">GDPR</div><p className="text-slate-600">Privacidad en el diseño</p></div>
+          <div><div className="text-3xl font-bold text-blue-600">Privacidad</div><p className="text-slate-600">Controles técnicos en el diseño</p></div>
         </div>
       </section>
 
@@ -49,7 +49,7 @@ export default function Home() {
             <Card className="p-6 border border-slate-200"><Zap className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">CV Local</h3><p className="text-slate-600">Crea un CV estructurado en minutos sin depender de una API externa.</p></Card>
             <Card className="p-6 border border-slate-200"><Download className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">PDF con Foto</h3><p className="text-slate-600">Descarga tu documento listo para enviar.</p></Card>
             <Card className="p-6 border border-slate-200"><BarChart3 className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Cursos Libres</h3><p className="text-slate-600">Aprende informática e IA con catálogo local y 39 idiomas preparados.</p></Card>
-            <Card className="p-6 border border-slate-200"><Lock className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Privacidad GDPR</h3><p className="text-slate-600">Controles de acceso, eliminación y exportación.</p></Card>
+            <Card className="p-6 border border-slate-200"><Lock className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Privacidad y control</h3><p className="text-slate-600">Controles de acceso, eliminación y exportación.</p></Card>
           </div>
         </div>
       </section>
@@ -87,7 +87,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 text-center text-sm">
-            <p>&copy; 2026 Belentani. Todos los derechos reservados. Cumplimiento estricto RGPD España / UE / Cataluña.</p>
+            <p>&copy; 2026 Belentani. Todos los derechos reservados. Medidas técnicas de privacidad y derechos de datos; revisión jurídica pendiente.</p>
           </div>
         </div>
       </footer>
