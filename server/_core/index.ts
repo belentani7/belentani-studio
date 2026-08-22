@@ -89,7 +89,7 @@ async function startServer() {
 
   app.get("/api/health", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
-    return res.status(200).json({ status: "ok", service: "belentani" });
+    return res.status(200).json({ status: "ok", service: "belentani", generation: "local-ready" });
   });
 
   app.post("/api/cv/photo", photoLimiter, async (req, res) => {

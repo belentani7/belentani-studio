@@ -37,8 +37,9 @@ describe("auditoría de regresión", () => {
 
   it("expone una señal de salud mínima sin datos de configuración", () => {
     expect(serverSource).toContain('app.get("/api/health"');
-    expect(serverSource).toContain('json({ status: "ok", service: "belentani" })');
+    expect(serverSource).toContain('json({ status: "ok", service: "belentani", generation: "local-ready" })');
     expect(serverSource).not.toContain('json({ status: "ok", databaseUrl');
+    expect(serverSource).not.toContain('json({ status: "ok", service: "belentani", provider');
   });
 
   it("no incorpora objetos de error de CV o respuestas de storage en los logs operativos", () => {

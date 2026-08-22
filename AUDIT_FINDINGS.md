@@ -64,7 +64,7 @@ La aplicación no debe afirmar que existe un DPD si no hay persona/entidad desig
 | Transparencia de solicitudes | El titular puede consultar el historial, categoría y estado de sus propias solicitudes de privacidad; la interfaz refresca el listado tras registrar una nueva petición. | El listado usa exclusivamente la colección autenticada de `dataExport`; regresión de aislamiento y revisión móvil. | Implementado técnicamente |
 | IA y coste | El proveedor predeterminado es local/determinista; la integración externa es opcional y revierte al modo local en error. El catálogo educativo tampoco llama por defecto a un proveedor. | Pruebas de fallback y catálogo local. | Implementado técnicamente |
 | Dependencias y secretos | Auditoría de producción sin vulnerabilidades conocidas y escaneo de archivos e historial Git sin patrones comunes de claves. | `pnpm audit --prod --audit-level=high` y escaneo no revelador. | Verificado en esta revisión |
-| Operación | `/api/health` devuelve señal mínima sin configuración; métricas globales excluyen usuarios, CVs, prompts y documentos. | Comprobación en ejecución y migración de tabla. | Implementado técnicamente |
+| Operación | `/api/health` devuelve una señal mínima de servicio y disponibilidad del generador local (`local-ready`), sin exponer proveedor externo, URL de base de datos ni secretos; métricas globales excluyen usuarios, CVs, prompts y documentos. | Regresión del contrato, comprobación en ejecución y migración de tabla. | Implementado técnicamente |
 
 ## Resultados de validación
 

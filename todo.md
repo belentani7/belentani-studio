@@ -453,3 +453,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Implementar solicitud de rectificación de datos con categorías mínimas, confirmación y trazabilidad
 - [x] Documentar la primera ejecución verificada de la purga programada y el estado pendiente de la migración diaria
 - [x] Mostrar al titular el historial y estado de sus solicitudes de privacidad sin exponer datos de terceros
+- [x] Añadir al estado público una señal mínima de disponibilidad del generador local sin divulgar proveedor ni secretos
