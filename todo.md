@@ -435,3 +435,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Evitar que navegadores o proxies almacenen en caché los PDF de CV privados
 - [x] Servir el catálogo educativo base sin llamadas de traducción a proveedores de IA
 - [x] Desacoplar la mejora de CV mediante una abstracción de proveedor local y opcional
+- [x] Añadir endpoint público de salud sin exposición de datos sensibles

@@ -34,4 +34,10 @@ describe("auditoría de regresión", () => {
     expect(serverSource).toContain('res.setHeader("Cache-Control", "private, no-store, max-age=0, must-revalidate")');
     expect(serverSource).toContain('res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive")');
   });
+
+  it("expone una señal de salud mínima sin datos de configuración", () => {
+    expect(serverSource).toContain('app.get("/api/health"');
+    expect(serverSource).toContain('json({ status: "ok", service: "belentani" })');
+    expect(serverSource).not.toContain('json({ status: "ok", databaseUrl');
+  });
 });

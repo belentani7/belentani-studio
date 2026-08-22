@@ -52,6 +52,11 @@ async function startServer() {
   registerStorageProxy(app);
   registerOAuthRoutes(app);
 
+  app.get("/api/health", (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    return res.status(200).json({ status: "ok", service: "belentani" });
+  });
+
   app.post("/api/cv/photo", photoLimiter, async (req, res) => {
     try {
       const ctx = await createContext({ req, res } as any);
