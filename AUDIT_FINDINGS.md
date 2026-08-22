@@ -59,7 +59,7 @@ La aplicación no debe afirmar que existe un DPD si no hay persona/entidad desig
 | Entrada y abuso | Esquemas estrictos, límites de texto/listas, rate limits para API, fotos, PDF y cursos; mutaciones de usuario con comprobación de mismo origen. | Pruebas de regresión de entrada excesiva, CSRF y autorización. | Implementado técnicamente |
 | Cabeceras | CSP de producción restrictiva, `frame-ancestors 'none'`, `object-src 'none'`, HSTS de Helmet, Referrer-Policy y Permissions-Policy mínima. | Pruebas de regresión de cabeceras. | Implementado técnicamente |
 | Registros | Logs de errores saneados; el helper de auditoría únicamente conserva metadatos técnicos limitados. | Pruebas de auditoría y logs. | Implementado técnicamente |
-| Borrado RGPD | Petición de baja con periodo de gracia y purga diaria autenticada mediante Heartbeat; incluye documentos, reportes y anonimización de cuenta. | Ruta cron y regresiones de archivo, purga, anonimización y autorización de la tarea. | Implementado técnicamente |
+| Borrado RGPD | Petición de baja con periodo de gracia y purga diaria autenticada mediante Heartbeat; incluye documentos, reportes y anonimización de cuenta. | La primera ejecución registrada de `belentani-gdpr-purge` finalizó correctamente el 22 de agosto de 2026 a las 08:28 UTC (HTTP 200, `processed: 0`, 1,638 ms), además de las regresiones de archivo, purga, anonimización y autorización. | Implementado técnicamente |
 | Rectificación | El panel permite registrar una solicitud autenticada por categoría de perfil, documentos u otra; no recopila narrativas ni adjuntos adicionales. | Validación Zod estricta, migración aplicada y regresiones de entrada y minimización. | Implementado técnicamente |
 | IA y coste | El proveedor predeterminado es local/determinista; la integración externa es opcional y revierte al modo local en error. El catálogo educativo tampoco llama por defecto a un proveedor. | Pruebas de fallback y catálogo local. | Implementado técnicamente |
 | Dependencias y secretos | Auditoría de producción sin vulnerabilidades conocidas y escaneo de archivos e historial Git sin patrones comunes de claves. | `pnpm audit --prod --audit-level=high` y escaneo no revelador. | Verificado en esta revisión |
@@ -75,6 +75,7 @@ La aplicación no debe afirmar que existe un DPD si no hay persona/entidad desig
 | Dependencias de producción | Sin vulnerabilidades conocidas en el último `pnpm audit --prod --audit-level=high`. |
 | Vista móvil | Landing, cursos y formulario guiado revisados a 375 × 812 px; la navegación pública se corrigió para no solaparse. |
 | Despliegue | Landing y `/api/health` verificados en el dominio publicado; CSP, HSTS, Permissions-Policy, Referrer-Policy y `no-store` confirmados por cabeceras. Checkpoints publicados y sincronizados en `belentani7/belentani-studio`. |
+| Tareas programadas | La purga diaria está habilitada para las 03:00 UTC y ha tenido una ejecución correcta. La migración diaria de CV cifrados está habilitada para las 03:05 UTC, pero todavía no tenía ejecuciones registradas en esta comprobación. |
 
 ## Matriz de riesgo residual
 
@@ -82,6 +83,7 @@ La aplicación no debe afirmar que existe un DPD si no hay persona/entidad desig
 | --- | --- | --- | --- | --- |
 | Rotación del secreto raíz sin re-cifrado | Baja | Alta | Plan de migración y re-cifrado antes de rotar `JWT_SECRET`; preferir una futura `ENCRYPTION_KEY` separada. | Pendiente de decisión operativa |
 | Borrado físico de objetos no referenciados en almacenamiento | Media | Media | La aplicación retira referencias y acceso; falta una política de ciclo de vida del proveedor para eliminación física. | Pendiente de configuración de plataforma |
+| Primera migración programada de CV históricos | Baja | Media | La tarea `belentani-cv-encryption-migration` está habilitada y programada; comprobar su primer resultado antes de considerar verificada la operación en producción. | Pendiente de primera ejecución |
 | Traducciones educativas revisadas fuera de español | Alta | Baja | El modo local sirve el catálogo base y comunica que 39 idiomas están preparados; no se simula traducción. | Pendiente de contenidos o proveedor opcional |
 | Garantía jurídica de cumplimiento | Media | Alta | Medidas técnicas y documentación; validar responsable, bases jurídicas, contratos, transferencias y procedimientos con asesoramiento profesional. | **LEGAL REVIEW REQUIRED** |
 | IA opcional | Baja en modo local | Variable | Por defecto desactivada; antes de activarla decidir proveedor, coste, transferencias y aviso al usuario. | **BLOCKED BY EXTERNAL CREDENTIAL** para proveedor externo |
