@@ -13,7 +13,7 @@ Belentani cifra el contenido estructurado de los CV antes de guardarlo en la col
 | Listados | Datos y URL de PDF excluidos de `cv.list` | La interfaz de historial recibe únicamente metadatos necesarios. |
 | Exportación RGPD | Descifrado solo dentro del proceso de servidor para el titular autenticado | La exportación incluye el contenido del documento sin guardar una copia descifrada. |
 | Foto | Tipo real validado con Sharp, re-encode JPEG, límite de 5 MB y prefijo de titularidad | Reduce contenido activo y evita usar fotos de otra cuenta. |
-| Proxy de almacenamiento | Claves acotadas, sin `..`, sin URLs externas y sin caracteres no permitidos | Impide traversal y redirecciones de almacenamiento controladas por el usuario. |
+| Proxy de almacenamiento | Claves acotadas, sin `..`, sin URLs externas, y autorización del propietario en `users/<id>/...` | Impide traversal, redirecciones de almacenamiento controladas por el usuario y lectura cruzada de fotos. |
 | Abuso | Límites de foto, PDF, cursos y API | Reduce consumo y operaciones repetitivas no autorizadas. |
 
 ## Reglas de acceso

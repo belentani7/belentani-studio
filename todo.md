@@ -411,6 +411,7 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [ ] Añadir pruebas de regresión de autorización, origin, límites, purga y PDF por propietario
 - [x] Restringir photoUrl al prefijo del usuario autenticado y corregir el patrón real de claves sin extensión
 - [x] Añadir prueba que impida usar una foto perteneciente a otro usuario
+- [x] Exigir autenticación y propiedad en el proxy de objetos bajo users/<id>/
 
 ## Publicación en GitHub
 - [x] Comprobar estado de Git y exclusión de secretos (.gitignore)
