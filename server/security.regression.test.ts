@@ -40,4 +40,11 @@ describe("auditoría de regresión", () => {
     expect(serverSource).toContain('json({ status: "ok", service: "belentani" })');
     expect(serverSource).not.toContain('json({ status: "ok", databaseUrl');
   });
+
+  it("no incorpora objetos de error de CV o respuestas de storage en los logs operativos", () => {
+    expect(serverSource).toContain('console.error("[PDF] generation failed")');
+    expect(serverSource).not.toContain('console.error("[PDF]", error)');
+    const storageProxySource = readFileSync(new URL("./_core/storageProxy.ts", import.meta.url), "utf8");
+    expect(storageProxySource).not.toContain("forgeResp.status} ${body}");
+  });
 });

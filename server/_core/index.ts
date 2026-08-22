@@ -71,8 +71,8 @@ async function startServer() {
       const buffer = await sharp(inputBuffer, { failOn: "error" }).rotate().resize({ width: 1200, height: 1200, fit: "inside", withoutEnlargement: true }).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
       const stored = await storagePut(`users/${ctx.user.id}/photo`, buffer, "image/jpeg");
       return res.json({ url: stored.url, key: stored.key });
-    } catch (error) {
-      console.error("[PhotoUpload]", error);
+    } catch {
+      console.error("[PhotoUpload] failed");
       return res.status(500).json({ error: "No se pudo guardar la foto" });
     }
   });
@@ -100,8 +100,8 @@ async function startServer() {
       res.setHeader("Pragma", "no-cache");
       res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
       return res.send(pdf);
-    } catch (error) {
-      console.error("[PDF]", error);
+    } catch {
+      console.error("[PDF] generation failed");
       return res.status(500).json({ error: "No se pudo generar el PDF" });
     }
   });
@@ -111,8 +111,8 @@ async function startServer() {
       const language = String(req.params.language);
       if (!isSupportedCourseLanguage(language)) return res.status(400).json({ error: "Idioma no soportado" });
       return res.json({ language, content: await getTranslatedCourse(language) });
-    } catch (error) {
-      console.error("[Courses]", error);
+    } catch {
+      console.error("[Courses] request failed");
       return res.status(502).json({ error: "No se pudo traducir el material" });
     }
   });
@@ -122,8 +122,8 @@ async function startServer() {
       const user = await sdk.authenticateRequest(req);
       if (!user.isCron || !user.taskUid) return res.status(403).json({ error: "cron-only" });
       return res.json({ ok: true, ...(await purgeExpiredPrivacyData()) });
-    } catch (error) {
-      console.error("[GDPR purge]", error);
+    } catch {
+      console.error("[GDPR purge] failed");
       return res.status(500).json({ error: "No se pudo ejecutar la purga GDPR" });
     }
   });
@@ -133,8 +133,8 @@ async function startServer() {
       const user = await sdk.authenticateRequest(req);
       if (!user.isCron || !user.taskUid) return res.status(403).json({ error: "cron-only" });
       return res.json({ ok: true, ...(await migrateLegacyCVData()) });
-    } catch (error) {
-      console.error("[CV encryption migration]", error);
+    } catch {
+      console.error("[CV encryption migration] failed");
       return res.status(500).json({ error: "No se pudo migrar el cifrado de CVs" });
     }
   });
