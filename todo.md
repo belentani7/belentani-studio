@@ -421,7 +421,7 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Localizar fuentes e inventariar las dos versiones (versión Node/Express monorepo vs versión ZIP frontend Next.js)
 - [x] Analizar diferencias arquitectónicas, seguridad, IA y manejo de PDF/foto
 - [x] Aplicar mejoras de usabilidad y robustez identificadas
-- [ ] Ejecutar tests, build, verificación de producción y sincronización en GitHub
+- [x] Ejecutar tests, build, verificación de producción y sincronización en GitHub
 
 ## Endurecimiento posterior a auditoría de versiones
 - [x] Aplicar sanitización determinista y límites de negocio al contrato de CV antes de llamar a la IA
