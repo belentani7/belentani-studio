@@ -445,3 +445,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Actualizar el informe de auditoría con controles verificados, límites y pendientes reales
 - [x] Añadir guardado y recuperación opcional de borrador local, sin incluir la foto ni activar almacenamiento por defecto
 - [x] Evitar que activar el guardado local pueda sobrescribir un borrador existente antes de recuperarlo
+- [x] Cargar de forma diferida rutas no iniciales para reducir el bundle de la primera visita
