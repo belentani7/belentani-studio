@@ -185,6 +185,12 @@ export async function getUserPrivacyRequests(userId: number) {
   return await db.select().from(privacyRequests).where(eq(privacyRequests.userId, userId)).orderBy(desc(privacyRequests.requestedAt));
 }
 
+export async function getUserQualityReports(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(qualityReports).where(eq(qualityReports.userId, userId)).orderBy(desc(qualityReports.createdAt));
+}
+
 export async function requestAccountDeletion(userId: number) {
   const db = await getDb();
   if (!db) return false;

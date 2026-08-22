@@ -17,6 +17,7 @@ describe("contratos de privacidad", () => {
     expect(routerSource).toContain("documents: await getUserDocuments(ctx.user.id, true)");
     expect(routerSource).toContain("auditLogs: await getUserAuditLogs(ctx.user.id)");
     expect(routerSource).toContain("privacyRequests: await getUserPrivacyRequests(ctx.user.id)");
+    expect(routerSource).toContain("qualityReports: await getUserQualityReports(ctx.user.id)");
     expect(routerSource).not.toContain("openId: ctx.user.openId");
   });
 });

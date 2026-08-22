@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { getUserDocuments, getDocumentById, createDocument, createQualityReport, getQualityReports, getUserTransactions, getUserAuditLogs, getUserPrivacyRequests, requestAccountDeletion, requestDataCorrection, recordOperationMetric } from "./db";
+import { getUserDocuments, getDocumentById, createDocument, createQualityReport, getQualityReports, getUserTransactions, getUserAuditLogs, getUserPrivacyRequests, getUserQualityReports, requestAccountDeletion, requestDataCorrection, recordOperationMetric } from "./db";
 import Stripe from "stripe";
 import { enhanceCV, getCVProviderStatus } from "./_core/cvPipeline";
 import { CVInputSchema } from "./_core/cvValidation";
@@ -79,6 +79,7 @@ export const appRouter = router({
       transactions: await getUserTransactions(ctx.user.id),
       auditLogs: await getUserAuditLogs(ctx.user.id),
       privacyRequests: await getUserPrivacyRequests(ctx.user.id),
+      qualityReports: await getUserQualityReports(ctx.user.id),
     })),
     requestDeletion: protectedProcedure.mutation(async ({ ctx }) => ({ success: await requestAccountDeletion(ctx.user.id) })),
     requestCorrection: protectedProcedure

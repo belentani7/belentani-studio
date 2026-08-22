@@ -455,3 +455,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Mostrar al titular el historial y estado de sus solicitudes de privacidad sin exponer datos de terceros
 - [x] Añadir al estado público una señal mínima de disponibilidad del generador local sin divulgar proveedor ni secretos
 - [x] Permitir reportar una incidencia de un CV propio con texto limitado y expectativas de revisión honestas
+- [x] Incluir los informes de incidencia propios en la exportación autenticada de datos personales

@@ -14,6 +14,7 @@ describe("privacy and donation contracts", () => {
     expect(result.profile.email).toBe("persona@example.com");
     expect(result).toHaveProperty("documents");
     expect(result).toHaveProperty("transactions");
+    expect(result).toHaveProperty("qualityReports");
     expect(result.profile).not.toHaveProperty("openId");
   });
 
