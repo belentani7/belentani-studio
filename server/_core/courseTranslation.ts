@@ -1,5 +1,3 @@
-import { invokeLLM } from "./llm";
-
 export const SUPPORTED_LANGUAGE_CODES = ["es", "en", "ca", "pt", "fr", "de", "it", "pl", "ro", "ar", "zh", "ja", "ko", "hi", "bn", "ru", "uk", "tr", "vi", "th", "id", "ms", "tl", "fa", "ur", "sw", "am", "so", "ne", "ta", "te", "ml", "kn", "gu", "mr", "bg", "cs", "hu", "el"] as const;
 export type CourseLanguage = typeof SUPPORTED_LANGUAGE_CODES[number];
 export type CourseContent = { id: string; title: string; text: string; steps: string[] };
@@ -17,19 +15,9 @@ export function isSupportedCourseLanguage(value: string): value is CourseLanguag
 export async function getTranslatedCourse(language: CourseLanguage): Promise<CourseCatalog> {
   const cached = cache.get(language);
   if (cached) return cached;
-  const response = await invokeLLM({
-    model: "gpt-5-mini",
-    messages: [
-      { role: "system", content: "Eres traductor educativo. Traduce todos los cursos sin añadir información, con lenguaje sencillo para personas adultas que aprenden informática. Devuelve solo JSON válido." },
-      { role: "user", content: JSON.stringify({ language, catalog: base }) },
-    ],
-    reasoning: { effort: "minimal" },
-    response_format: { type: "json_schema", json_schema: { name: "course_catalog_translation", strict: true, schema: { type: "object", properties: { courses: { type: "array", items: { type: "object", properties: { id: { type: "string" }, title: { type: "string" }, text: { type: "string" }, steps: { type: "array", items: { type: "string" } } }, required: ["id", "title", "text", "steps"], additionalProperties: false } } }, required: ["courses"], additionalProperties: false } } },
-  });
-  const raw = response.choices?.[0]?.message?.content;
-  const translated = JSON.parse(typeof raw === "string" ? raw : "{}");
-  if (!Array.isArray(translated.courses) || translated.courses.length !== base.courses.length) throw new Error("Traducción inválida");
-  const result = { courses: translated.courses.map((course: CourseContent, index: number) => ({ id: base.courses[index].id, title: String(course.title), text: String(course.text), steps: Array.isArray(course.steps) ? course.steps.slice(0, 5).map(String) : base.courses[index].steps })) };
+  // El catálogo base no necesita proveedor externo. Las traducciones asistidas
+  // se incorporarán solo cuando haya contenidos revisados o un proveedor opcional.
+  const result = { courses: base.courses.map((course) => ({ ...course, steps: [...course.steps] })) };
   cache.set(language, result);
   return result;
 }

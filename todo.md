@@ -433,3 +433,5 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Migrar de forma acotada los CVs históricos que aún estén en texto plano al sobre cifrado
 - [x] Activar un modo local gratuito que genere el CV sin llamadas a un proveedor de IA
 - [x] Evitar que navegadores o proxies almacenen en caché los PDF de CV privados
+- [x] Servir el catálogo educativo base sin llamadas de traducción a proveedores de IA
+- [x] Desacoplar la mejora de CV mediante una abstracción de proveedor local y opcional

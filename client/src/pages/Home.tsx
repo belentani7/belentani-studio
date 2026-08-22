@@ -7,7 +7,7 @@ import { trpc } from "@/lib/trpc";
 
 export default function Home() {
   const donation = trpc.donation.createCheckout.useMutation();
-  const pricingPlans = [{ name: "Todo gratis", price: "0€", description: "Sin suscripción ni pago obligatorio", credits: "CV + cursos + PDF", features: ["Generación de CV con IA", "PDF descargable", "Foto opcional", "Cursos de informática e IA", "39 idiomas disponibles"], cta: "Crear mi CV", highlighted: true }];
+  const pricingPlans = [{ name: "Todo gratis", price: "0€", description: "Sin suscripción ni pago obligatorio", credits: "CV + cursos + PDF", features: ["Generación local de CV", "PDF descargable", "Foto opcional", "Cursos de informática e IA", "39 idiomas preparados"], cta: "Crear mi CV", highlighted: true }];
   const handleDonation = async (amount: number) => { const result = await donation.mutateAsync({ amount }); if (result.checkoutUrl) window.open(result.checkoutUrl, "_blank", "noopener,noreferrer"); };
 
   return (
@@ -29,7 +29,7 @@ export default function Home() {
       <section className="flex-1 max-w-6xl mx-auto px-4 py-20 text-center">
         <div className="mb-8">
           <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">Tu CV Perfecto en Minutos</h1>
-          <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">Genera tu CV profesional gratis con inteligencia artificial, aprende informática y mejora tus oportunidades en España. Accesible, con controles de privacidad y pensado para todos.</p>
+          <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">Genera tu CV profesional gratis con herramientas locales, aprende informática y mejora tus oportunidades en España. Accesible, con controles de privacidad y pensado para todos.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <a href={getLoginUrl()}><Button size="lg" className="px-8 py-6 text-lg">Comenzar Gratis</Button></a>
@@ -37,7 +37,7 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-3 gap-8 text-center mb-16">
           <div><div className="text-3xl font-bold text-blue-600">0€</div><p className="text-slate-600">CV y cursos gratis</p></div>
-          <div><div className="text-3xl font-bold text-blue-600">39</div><p className="text-slate-600">Idiomas disponibles</p></div>
+          <div><div className="text-3xl font-bold text-blue-600">39</div><p className="text-slate-600">Idiomas preparados</p></div>
           <div><div className="text-3xl font-bold text-blue-600">GDPR</div><p className="text-slate-600">Privacidad en el diseño</p></div>
         </div>
       </section>
@@ -46,9 +46,9 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-slate-900 mb-16">¿Por qué elegir Belentani?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="p-6 border border-slate-200"><Zap className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">IA Instantánea</h3><p className="text-slate-600">Crea tu CV optimizado para ATS en minutos.</p></Card>
+            <Card className="p-6 border border-slate-200"><Zap className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">CV Local</h3><p className="text-slate-600">Crea un CV estructurado en minutos sin depender de una API externa.</p></Card>
             <Card className="p-6 border border-slate-200"><Download className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">PDF con Foto</h3><p className="text-slate-600">Descarga tu documento listo para enviar.</p></Card>
-            <Card className="p-6 border border-slate-200"><BarChart3 className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Cursos Libres</h3><p className="text-slate-600">Aprende informática e IA en 39 idiomas.</p></Card>
+            <Card className="p-6 border border-slate-200"><BarChart3 className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Cursos Libres</h3><p className="text-slate-600">Aprende informática e IA con catálogo local y 39 idiomas preparados.</p></Card>
             <Card className="p-6 border border-slate-200"><Lock className="w-12 h-12 text-blue-600 mb-4"/><h3 className="text-lg font-semibold mb-2">Privacidad GDPR</h3><p className="text-slate-600">Controles de acceso, eliminación y exportación.</p></Card>
           </div>
         </div>
@@ -77,8 +77,8 @@ export default function Home() {
             <div>
               <h3 className="font-semibold text-white mb-3">Educación</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/courses" className="hover:text-white transition-colors">Cursos en 39 idiomas</Link></li>
-                <li><Link href="/dashboard" className="hover:text-white transition-colors">Generar CV con IA</Link></li>
+                <li><Link href="/courses" className="hover:text-white transition-colors">Cursos gratuitos y 39 idiomas preparados</Link></li>
+                <li><Link href="/dashboard" className="hover:text-white transition-colors">Generar CV gratis</Link></li>
               </ul>
             </div>
             <div>

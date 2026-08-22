@@ -5,7 +5,7 @@ import { generateCVPDF } from "./pdfGenerator";
 const { invokeLLMMock } = vi.hoisted(() => ({ invokeLLMMock: vi.fn() }));
 vi.mock("./llm", () => ({ invokeLLM: invokeLLMMock }));
 
-import { enhanceCV, getCVEnhancementMode } from "./cvPipeline";
+import { enhanceCV, getCVEnhancementMode, getCVProviderStatus } from "./cvPipeline";
 
 describe("CV pipeline", () => {
   beforeEach(() => { invokeLLMMock.mockReset(); vi.stubEnv("CV_ENHANCEMENT_MODE", "ai"); });
@@ -32,6 +32,7 @@ describe("CV pipeline", () => {
     const input = { fullName: "Persona", email: "persona@example.com", experience: [{ company: "Empresa", position: "Atención al cliente", duration: "2025", description: "" }], education: [], skills: ["Excel", "Atención"] };
     const enhanced = await enhanceCV(input);
     expect(getCVEnhancementMode()).toBe("local");
+    expect(getCVProviderStatus()).toEqual({ id: "local", enabled: true, external: false, chargeable: false });
     expect(invokeLLMMock).not.toHaveBeenCalled();
     expect(enhanced.summary).toContain("Atención al cliente");
   });

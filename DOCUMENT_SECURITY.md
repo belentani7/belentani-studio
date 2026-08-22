@@ -38,4 +38,6 @@ La derivación HKDF desde `JWT_SECRET` permite operar sin una nueva clave manual
 
 El modo de generación predeterminado es `local`, por lo que no llama a ningún proveedor de IA ni consume créditos. La opción `CV_ENHANCEMENT_MODE=ai` permite habilitar el proveedor integrado en una futura operación consciente de coste; si no responde, el sistema vuelve al modo local.
 
+La lógica de CV usa una interfaz de proveedor: `local` aplica transformaciones deterministas gratuitas y `builtin` es un adaptador opcional del proveedor integrado. La interfaz mantiene el frontend aislado de credenciales y permite añadir futuros proveedores sin cambiar los flujos de validación, almacenamiento o PDF.
+
 Estos controles reducen riesgos técnicos comprobados, pero no sustituyen una evaluación jurídica, un acuerdo de encargados, la gestión de brechas o un análisis de impacto cuando sea exigible.

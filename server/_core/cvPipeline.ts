@@ -29,8 +29,36 @@ export function enhanceCVLocally(input: CVInput): CVInput {
   return { ...input, summary: fragments.join(" ") };
 }
 
-export async function enhanceCV(input: CVInput): Promise<CVInput> {
-  if (getCVEnhancementMode() === "local") return enhanceCVLocally(input);
+export type CVProviderId = "local" | "builtin";
+export type CVProviderStatus = { id: CVProviderId; enabled: boolean; external: boolean; chargeable: boolean };
+
+interface CVEnhancementProvider {
+  id: CVProviderId;
+  enhance(input: CVInput): Promise<CVInput>;
+}
+
+const localProvider: CVEnhancementProvider = {
+  id: "local",
+  enhance: async (input) => enhanceCVLocally(input),
+};
+
+const builtInProvider: CVEnhancementProvider = {
+  id: "builtin",
+  enhance: async (input) => enhanceCVWithBuiltinProvider(input),
+};
+
+export function getCVProviderStatus(): CVProviderStatus {
+  const aiEnabled = getCVEnhancementMode() === "ai";
+  return aiEnabled
+    ? { id: "builtin", enabled: true, external: true, chargeable: true }
+    : { id: "local", enabled: true, external: false, chargeable: false };
+}
+
+function resolveCVProvider(): CVEnhancementProvider {
+  return getCVEnhancementMode() === "ai" ? builtInProvider : localProvider;
+}
+
+async function enhanceCVWithBuiltinProvider(input: CVInput): Promise<CVInput> {
   try {
     const response = await invokeLLM({
       model: "gpt-5-mini",
@@ -55,4 +83,8 @@ export async function enhanceCV(input: CVInput): Promise<CVInput> {
     // La caída del proveedor nunca bloquea un CV gratuito.
     return enhanceCVLocally(input);
   }
+}
+
+export async function enhanceCV(input: CVInput): Promise<CVInput> {
+  return resolveCVProvider().enhance(input);
 }
