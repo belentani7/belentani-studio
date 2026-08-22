@@ -428,3 +428,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Cifrar el contenido persistido del CV con AES-256-GCM y descifrarlo solo en exportación/PDF
 - [x] Añadir pruebas de cifrado de CV, sanitización y ownership del PDF
 - [x] Verificar y documentar el endpoint de purga GDPR sin cambiar el esquema de forma destructiva
+- [x] Programar la purga GDPR diaria en producción mediante Heartbeat

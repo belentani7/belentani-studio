@@ -26,6 +26,8 @@ El proxy solo resuelve claves de objeto internas. No acepta `..`, esquemas como 
 
 La solicitud de supresión archiva documentos durante treinta días. El endpoint de mantenimiento `/api/scheduled/gdpr-purge` exige una identidad de tarea programada y, al expirar el periodo, elimina documentos y reportes, anonimiza la cuenta y borra identificadores personales de los logs de auditoría. La tarea debe ejecutarse mediante Heartbeat en producción; su programación y resultados se administran fuera del proceso web.
 
+La tarea de producción `belentani-gdpr-purge` está activada con la expresión UTC `0 0 3 * * *` (todos los días a las 03:00 UTC) y el identificador de plataforma `2dnhverckRxnyzjErNoHtf`.
+
 > La interfaz de almacenamiento disponible no ofrece eliminación física directa de objetos. Al purgar se eliminan las referencias y el acceso de aplicación; la retención/borrado físico del proveedor debe configurarse con una política de ciclo de vida cuando la plataforma lo permita.
 
 ## Limitaciones y operación segura
