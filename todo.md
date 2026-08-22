@@ -456,3 +456,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Añadir al estado público una señal mínima de disponibilidad del generador local sin divulgar proveedor ni secretos
 - [x] Permitir reportar una incidencia de un CV propio con texto limitado y expectativas de revisión honestas
 - [x] Incluir los informes de incidencia propios en la exportación autenticada de datos personales
+- [x] Mostrar al titular el estado de sus propias incidencias de CV desde el Dashboard

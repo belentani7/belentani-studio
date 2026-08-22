@@ -88,6 +88,10 @@ export const appRouter = router({
   }),
 
   quality: router({
+    mine: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserQualityReports(ctx.user.id);
+    }),
+
     report: protectedProcedure
       .input(z.object({ documentId: z.number().int().positive(), issue: z.string().trim().min(1).max(4000) }).strict())
       .mutation(async ({ ctx, input }) => {

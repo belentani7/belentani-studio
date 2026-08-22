@@ -22,6 +22,7 @@ describe("regresión de la integración de versiones", () => {
 
   it("permite informar una incidencia de un CV propio sin prometer revisión automática", () => {
     expect(dashboardSource).toContain("trpc.quality.report.useMutation()");
+    expect(dashboardSource).toContain("trpc.quality.mine.useQuery()");
     expect(dashboardSource).toContain("El modo gratuito no promete una revisión automática ni un CV adicional");
     expect(dashboardSource).toContain("documentId: selectedId");
   });
