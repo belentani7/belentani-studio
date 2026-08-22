@@ -442,3 +442,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Corregir la navegación pública en móvil para evitar solapamientos y controles cortados
 - [x] Endurecer CSP, permisos del navegador y políticas de referencia en producción
 - [x] Exigir mismo origen en mutaciones de API de usuario para reducir el riesgo CSRF
+- [x] Actualizar el informe de auditoría con controles verificados, límites y pendientes reales

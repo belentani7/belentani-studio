@@ -46,3 +46,58 @@ El contraste se hizo con fuentes oficiales: [RGPD 2016/679 en EUR-Lex](https://e
 La web tiene banner y páginas legales, pero eso no demuestra cumplimiento. Faltan o deben verificarse documentalmente: identidad y domicilio del responsable, base jurídica por finalidad, encargados y transferencias internacionales (OAuth, LLM, Stripe/Forge/S3), registro de actividades, análisis de riesgos, contratos de encargado, procedimiento de brechas, plazos de respuesta DSAR, prueba de consentimiento y retirada, política de retención ejecutada, y designación real/comunicación de DPD solo si procede. “100% seguro”, “cifrado empresarial” y “cero riesgo legal” son afirmaciones que deben retirarse o probarse.
 
 La aplicación no debe afirmar que existe un DPD si no hay persona/entidad designada y canal operativo. En Cataluña, APDCAT puede ser autoridad de control según el responsable y el ámbito; no sustituye el análisis de competencia de AEPD.
+
+## Estado técnico verificado — 22 de agosto de 2026
+
+> Esta sección sustituye el estado de riesgo descrito como **inicial** en las secciones anteriores. Conserva el diagnóstico previo como trazabilidad, no como descripción de la versión publicada actual.
+
+| Área | Control técnico actual | Evidencia verificada | Estado |
+| --- | --- | --- | --- |
+| CV en reposo | `cvData` se persiste en un sobre `cv-v1` con AES-256-GCM e IV aleatorio; se descifra solo dentro del proceso de servidor para PDF o exportación. | Pruebas de cifrado y migración; la tarea diaria migra lotes históricos. | Implementado técnicamente |
+| Fotos y almacenamiento | Se valida el tipo real con Sharp, se re-encodea a JPEG, se limita a 5 MB y el proxy exige autenticación/propiedad para rutas `users/<id>/`. | Pruebas de subida y de no acceso cruzado. | Implementado técnicamente |
+| PDF | La descarga exige propietario, se genera bajo demanda y responde con `private, no-store`, `Pragma: no-cache` y `X-Robots-Tag`. | Pruebas de ownership y de cabeceras. | Implementado técnicamente |
+| Entrada y abuso | Esquemas estrictos, límites de texto/listas, rate limits para API, fotos, PDF y cursos; mutaciones de usuario con comprobación de mismo origen. | Pruebas de regresión de entrada excesiva, CSRF y autorización. | Implementado técnicamente |
+| Cabeceras | CSP de producción restrictiva, `frame-ancestors 'none'`, `object-src 'none'`, HSTS de Helmet, Referrer-Policy y Permissions-Policy mínima. | Pruebas de regresión de cabeceras. | Implementado técnicamente |
+| Registros | Logs de errores saneados; el helper de auditoría únicamente conserva metadatos técnicos limitados. | Pruebas de auditoría y logs. | Implementado técnicamente |
+| Borrado RGPD | Petición de baja con periodo de gracia y purga diaria autenticada mediante Heartbeat; incluye documentos, reportes y anonimización de cuenta. | Ruta cron, prueba y tarea programada activa. | Implementado técnicamente |
+| IA y coste | El proveedor predeterminado es local/determinista; la integración externa es opcional y revierte al modo local en error. El catálogo educativo tampoco llama por defecto a un proveedor. | Pruebas de fallback y catálogo local. | Implementado técnicamente |
+| Dependencias y secretos | Auditoría de producción sin vulnerabilidades conocidas y escaneo de archivos e historial Git sin patrones comunes de claves. | `pnpm audit --prod --audit-level=high` y escaneo no revelador. | Verificado en esta revisión |
+| Operación | `/api/health` devuelve señal mínima sin configuración; métricas globales excluyen usuarios, CVs, prompts y documentos. | Comprobación en ejecución y migración de tabla. | Implementado técnicamente |
+
+## Resultados de validación
+
+| Comprobación | Resultado |
+| --- | --- |
+| Análisis de tipos | `pnpm check` correcto. |
+| Suite de regresión | 14 archivos y **36 pruebas** correctas en la última ejecución. |
+| Build de producción | `pnpm build` correcto. El bundle de cliente conserva un aviso de tamaño superior a 500 kB; es una mejora de rendimiento pendiente, no un fallo de compilación. |
+| Dependencias de producción | Sin vulnerabilidades conocidas en el último `pnpm audit --prod --audit-level=high`. |
+| Vista móvil | Landing, cursos y formulario guiado revisados a 375 × 812 px; la navegación pública se corrigió para no solaparse. |
+| Despliegue | Checkpoints publicados y sincronizados en `belentani7/belentani-studio`. |
+
+## Matriz de riesgo residual
+
+| Riesgo | Probabilidad | Impacto | Mitigación disponible | Estado |
+| --- | --- | --- | --- | --- |
+| Rotación del secreto raíz sin re-cifrado | Baja | Alta | Plan de migración y re-cifrado antes de rotar `JWT_SECRET`; preferir una futura `ENCRYPTION_KEY` separada. | Pendiente de decisión operativa |
+| Borrado físico de objetos no referenciados en almacenamiento | Media | Media | La aplicación retira referencias y acceso; falta una política de ciclo de vida del proveedor para eliminación física. | Pendiente de configuración de plataforma |
+| Traducciones educativas revisadas fuera de español | Alta | Baja | El modo local sirve el catálogo base y comunica que 39 idiomas están preparados; no se simula traducción. | Pendiente de contenidos o proveedor opcional |
+| Garantía jurídica de cumplimiento | Media | Alta | Medidas técnicas y documentación; validar responsable, bases jurídicas, contratos, transferencias y procedimientos con asesoramiento profesional. | **LEGAL REVIEW REQUIRED** |
+| IA opcional | Baja en modo local | Variable | Por defecto desactivada; antes de activarla decidir proveedor, coste, transferencias y aviso al usuario. | **BLOCKED BY EXTERNAL CREDENTIAL** para proveedor externo |
+
+## Límites honestos
+
+La aplicación no puede afirmar estar “blindada al 100 %” ni jurídicamente certificada solo por su código. El RGPD exige, además de medidas técnicas, responsabilidades organizativas y documentación de tratamiento.[1] La LOPDGDD y la LSSI-CE añaden obligaciones que dependen de la entidad responsable, los tratamientos y las comunicaciones comerciales reales.[2] [3]
+
+Las decisiones empresariales pendientes incluyen identificar formalmente al responsable, publicar datos de contacto válidos, decidir encargados/subencargados, comprobar transferencias internacionales, establecer el proceso de brechas y definir la retención física del almacenamiento. La designación de DPD debe analizarse según las circunstancias reales, no declararse sin nombramiento y canal efectivo.[4]
+
+## Modelo de coste y producto
+
+El **modo básico útil** permanece gratuito: captura validada de datos, CV estructurado, PDF con foto, historial, exportación y cursos base. La viabilidad de bajo coste se apoya en operaciones locales, rate limits, PDF bajo demanda y donaciones voluntarias. Las opciones que sí pueden requerir análisis económico previo son traducción asistida, mejora de IA, OCR, correo transaccional, almacenamiento de larga duración y soporte a gran escala. No se activa ninguna de ellas silenciosamente.
+
+### Referencias
+
+[1]: https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32016R0679 "Reglamento (UE) 2016/679 — RGPD"
+[2]: https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673 "Ley Orgánica 3/2018 — LOPDGDD"
+[3]: https://www.boe.es/buscar/act.php?id=BOE-A-2002-13758 "Ley 34/2002 — LSSI-CE"
+[4]: https://www.aepd.es/preguntas-frecuentes/4-dpd/1-delegado-de-proteccion-de-datos/FAQ-0402-cuando-se-debe-nombrar-un-dpd "AEPD — Cuándo debe designarse un delegado de protección de datos"
