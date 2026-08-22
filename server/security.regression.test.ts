@@ -47,4 +47,11 @@ describe("auditoría de regresión", () => {
     const storageProxySource = readFileSync(new URL("./_core/storageProxy.ts", import.meta.url), "utf8");
     expect(storageProxySource).not.toContain("forgeResp.status} ${body}");
   });
+
+  it("declara políticas restrictivas de contenido, referencia y permisos en producción", () => {
+    expect(serverSource).toContain('frameAncestors: ["\'none\'"]');
+    expect(serverSource).toContain('objectSrc: ["\'none\'"]');
+    expect(serverSource).toContain('referrerPolicy: { policy: "strict-origin-when-cross-origin" }');
+    expect(serverSource).toContain('res.setHeader("Permissions-Policy", "camera=(), geolocation=(), microphone=(), payment=(), usb=()")');
+  });
 });

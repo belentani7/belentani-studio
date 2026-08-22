@@ -46,7 +46,29 @@ async function startServer() {
   const server = createServer(app);
   app.set("trust proxy", 1);
   app.disable("x-powered-by");
-  app.use(helmet({ contentSecurityPolicy: process.env.NODE_ENV === "production" ? undefined : false, crossOriginEmbedderPolicy: false }));
+  app.use(helmet({
+    contentSecurityPolicy: process.env.NODE_ENV === "production" ? {
+      directives: {
+        defaultSrc: ["'self'"],
+        baseUri: ["'self'"],
+        objectSrc: ["'none'"],
+        frameAncestors: ["'none'"],
+        formAction: ["'self'"],
+        imgSrc: ["'self'", "data:"],
+        fontSrc: ["'self'", "data:"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        connectSrc: ["'self'"],
+        upgradeInsecureRequests: [],
+      },
+    } : false,
+    crossOriginEmbedderPolicy: false,
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  }));
+  app.use((_req, res, next) => {
+    res.setHeader("Permissions-Policy", "camera=(), geolocation=(), microphone=(), payment=(), usb=()");
+    next();
+  });
   app.use(express.json({ limit: "8mb", strict: true }));
   app.use(express.urlencoded({ limit: "1mb", extended: false }));
   registerStorageProxy(app);
