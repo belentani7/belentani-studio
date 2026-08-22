@@ -194,6 +194,14 @@ export async function requestAccountDeletion(userId: number) {
   return true;
 }
 
+/** Stores only a bounded correction category; explanatory personal data is deliberately not collected here. */
+export async function requestDataCorrection(userId: number, requestScope: "profile" | "documents" | "other") {
+  const db = await getDb();
+  if (!db) return false;
+  await db.insert(privacyRequests).values({ userId, type: "data_correction", status: "pending", requestScope, requestedAt: new Date() } as any);
+  return true;
+}
+
 export async function purgeExpiredPrivacyData(now = new Date()) {
   const db = await getDb();
   if (!db) return { processed: 0 };

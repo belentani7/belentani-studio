@@ -1,0 +1,1 @@
+ALTER TABLE `privacyRequests` ADD `requestScope` varchar(32);

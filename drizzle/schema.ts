@@ -118,6 +118,7 @@ export const privacyRequests = mysqlTable("privacyRequests", {
   userId: int("userId").notNull(),
   type: mysqlEnum("type", ["data_export", "account_deletion", "data_correction"]).notNull(),
   status: mysqlEnum("status", ["pending", "in_progress", "completed", "cancelled"]).default("pending").notNull(),
+  requestScope: varchar("requestScope", { length: 32 }),
   exportUrl: varchar("exportUrl", { length: 512 }), // Temporary URL to download exported data (expires in 7 days)
   requestedAt: timestamp("requestedAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),

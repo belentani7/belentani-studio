@@ -450,3 +450,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Retirar afirmaciones absolutas de calidad o cumplimiento de la página pública
 - [x] Consolidar los resultados finales de pruebas, producción y GitHub en la documentación de auditoría
 - [x] Actualizar la auditoría con la cobertura ampliada de exportación y purga de privacidad
+- [x] Implementar solicitud de rectificación de datos con categorías mínimas, confirmación y trazabilidad
