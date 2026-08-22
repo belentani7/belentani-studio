@@ -7,6 +7,7 @@ import { toast } from "sonner";
 type CorrectionScope = "profile" | "documents" | "other";
 
 export default function PrivacyPanel() {
+  const utils = trpc.useUtils();
   const data = trpc.privacy.dataExport.useQuery();
   const deletion = trpc.privacy.requestDeletion.useMutation();
   const correction = trpc.privacy.requestCorrection.useMutation();
@@ -33,6 +34,7 @@ export default function PrivacyPanel() {
       return;
     }
     setRequested(true);
+    await utils.privacy.dataExport.invalidate();
     toast.success("Solicitud registrada");
   };
 
@@ -43,6 +45,7 @@ export default function PrivacyPanel() {
       return;
     }
     setCorrectionRequested(true);
+    await utils.privacy.dataExport.invalidate();
     toast.success("Solicitud de rectificación registrada");
   };
 
@@ -73,6 +76,23 @@ export default function PrivacyPanel() {
             <option value="other">Otra categoría</option>
           </select>
           <Button className="mt-4" variant="outline" onClick={requestCorrection} disabled={correctionRequested || correction.isPending}>{correctionRequested ? "Solicitud registrada" : "Solicitar rectificación"}</Button>
+        </Card>
+
+        <Card className="p-6">
+          <h2 className="text-xl font-semibold">Mis solicitudes registradas</h2>
+          <p className="mt-2 text-sm text-slate-600">Este listado muestra solo las solicitudes asociadas a tu cuenta.</p>
+          {data.isLoading ? <p className="mt-3 text-sm text-slate-500">Cargando solicitudes…</p> : (data.data?.privacyRequests.length ?? 0) === 0 ? <p className="mt-3 text-sm text-slate-500">Todavía no tienes solicitudes registradas.</p> : (
+            <ul className="mt-4 space-y-3" aria-live="polite">
+              {data.data?.privacyRequests.map((request) => (
+                <li key={request.id} className="rounded-md border border-slate-200 bg-white p-3 text-sm text-slate-700">
+                  <p className="font-medium text-slate-900">{request.type === "account_deletion" ? "Eliminación de cuenta" : request.type === "data_correction" ? "Rectificación de datos" : "Exportación de datos"}</p>
+                  {request.type === "data_correction" && request.requestScope ? <p className="mt-1">Categoría: {request.requestScope === "profile" ? "Datos de perfil" : request.requestScope === "documents" ? "Datos de documentos" : "Otra categoría"}</p> : null}
+                  <p className="mt-1">Estado: {request.status === "completed" ? "Completada" : request.status === "in_progress" ? "En curso" : request.status === "cancelled" ? "Cancelada" : "Pendiente"}</p>
+                  <p className="mt-1 text-slate-500">Registrada: {new Date(request.requestedAt).toLocaleDateString("es-ES")}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </Card>
       </div>
     </main>

@@ -452,3 +452,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Actualizar la auditoría con la cobertura ampliada de exportación y purga de privacidad
 - [x] Implementar solicitud de rectificación de datos con categorías mínimas, confirmación y trazabilidad
 - [x] Documentar la primera ejecución verificada de la purga programada y el estado pendiente de la migración diaria
+- [x] Mostrar al titular el historial y estado de sus solicitudes de privacidad sin exponer datos de terceros
