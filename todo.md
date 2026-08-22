@@ -444,3 +444,4 @@ AI-powered CV generation platform for budget-conscious users. Accessible pricing
 - [x] Exigir mismo origen en mutaciones de API de usuario para reducir el riesgo CSRF
 - [x] Actualizar el informe de auditoría con controles verificados, límites y pendientes reales
 - [x] Añadir guardado y recuperación opcional de borrador local, sin incluir la foto ni activar almacenamiento por defecto
+- [x] Evitar que activar el guardado local pueda sobrescribir un borrador existente antes de recuperarlo

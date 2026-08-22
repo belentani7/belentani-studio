@@ -35,6 +35,7 @@ export default function Dashboard() {
   const [skillsText, setSkillsText] = useState("");
   const [formData, setFormData] = useState<CVForm>(emptyForm);
   const [saveDraft, setSaveDraft] = useState(false);
+  const [draftRestored, setDraftRestored] = useState(false);
   const generateCV = trpc.cv.generate.useMutation();
   const listCVs = trpc.cv.list.useQuery();
 
@@ -44,6 +45,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!saveDraft) return;
+    if (!draftRestored && window.localStorage.getItem(DRAFT_KEY)) return;
     const timer = window.setTimeout(() => {
       const draft = { ...formData, photoUrl: "", skillsText };
       window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
@@ -79,6 +81,7 @@ export default function Dashboard() {
       });
       setSkillsText(shortText(draft.skillsText, 2400));
       setSaveDraft(true);
+      setDraftRestored(true);
       setStep(0);
       toast.success("Borrador recuperado. Por privacidad, tendrás que volver a subir la foto.");
     } catch {
@@ -90,6 +93,7 @@ export default function Dashboard() {
   const clearDraft = () => {
     window.localStorage.removeItem(DRAFT_KEY);
     setSaveDraft(false);
+    setDraftRestored(true);
     toast.success("Borrador local eliminado de este dispositivo");
   };
 
@@ -140,6 +144,7 @@ export default function Dashboard() {
       await generateCV.mutateAsync(payload);
       window.localStorage.removeItem(DRAFT_KEY);
       setSaveDraft(false);
+      setDraftRestored(false);
       setFormData(emptyForm());
       setSkillsText("");
       toast.success("CV generado gratis en modo local. Ya puedes descargarlo desde Mis CVs");
@@ -159,7 +164,7 @@ export default function Dashboard() {
         </header>
 
         <div className="mb-5 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <label className="flex cursor-pointer items-start gap-3"><input className="mt-1 h-4 w-4" type="checkbox" checked={saveDraft} onChange={(event) => setSaveDraft(event.target.checked)} /><span><strong>Guardar borrador en este dispositivo</strong><span className="mt-1 block text-slate-600">Es opcional, no guarda la foto y puedes borrarlo cuando quieras.</span></span></label>
+          <label className="flex cursor-pointer items-start gap-3"><input className="mt-1 h-4 w-4" type="checkbox" checked={saveDraft} onChange={(event) => { const next = event.target.checked; setSaveDraft(next); if (next && !window.localStorage.getItem(DRAFT_KEY)) setDraftRestored(true); if (next && window.localStorage.getItem(DRAFT_KEY) && !draftRestored) toast.message("Hay un borrador guardado: recupéralo o bórralo antes de guardar uno nuevo."); }} /><span><strong>Guardar borrador en este dispositivo</strong><span className="mt-1 block text-slate-600">Es opcional, no guarda la foto y puedes borrarlo cuando quieras.</span></span></label>
           <div className="flex gap-2"><Button type="button" size="sm" variant="outline" onClick={restoreDraft}>Recuperar</Button>{saveDraft && <Button type="button" size="sm" variant="ghost" onClick={clearDraft}>Borrar</Button>}</div>
         </div>
 
