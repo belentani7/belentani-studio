@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Belentani — Creative Technologist</title>
+  <meta name="description" content="Belentani is a creative technologist building AI systems, immersive web experiences, and voice-enabled products." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07080b; --panel:rgba(255,255,255,.04); --panel-2:rgba(255,255,255,.07);
+      --line:rgba(255,255,255,.09); --text:#eef2ff; --muted:#9ca3af; --accent:#f97316;
+      --accent-2:#38bdf8; --shadow:0 20px 80px rgba(0,0,0,.35);
+      --radius:24px; --max:1160px;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:
+      radial-gradient(circle at top left, rgba(56,189,248,.14), transparent 26%),
+      radial-gradient(circle at 80% 10%, rgba(249,115,22,.12), transparent 22%),
+      linear-gradient(180deg,#050608 0%, #07080b 60%, #06070a 100%);
+      color:var(--text);line-height:1.5}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+    .nav{position:sticky;top:0;z-index:20;background:rgba(7,8,11,.72);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+    .nav .inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+    .brand{font-weight:800;letter-spacing:.18em;font-size:12px;text-transform:uppercase;color:#fff}
+    .nav a{color:var(--muted);font-size:13px}
+    .nav-links{display:flex;gap:20px;flex-wrap:wrap}
+    .hero{padding:92px 0 36px}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    .dot{width:7px;height:7px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));box-shadow:0 0 18px rgba(249,115,22,.5)}
+    h1{font-size:clamp(44px,7vw,86px);line-height:.95;margin:18px 0 18px;letter-spacing:-.06em;max-width:10ch}
+    .lead{max-width:640px;color:#cbd5e1;font-size:18px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0 0}
+    .btn{padding:13px 18px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);transition:transform .22s ease,border-color .22s ease,background .22s ease}
+    .btn:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),#fb7185);color:#fff;border-color:transparent;box-shadow:0 10px 40px rgba(249,115,22,.24)}
+    .btn.primary:hover{background:linear-gradient(135deg,#fb923c,#f43f5e)}
+    .grid{display:grid;gap:18px}
+    .stats{grid-template-columns:repeat(4,minmax(0,1fr));margin:46px 0 0}
+    .stat,.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .stat{padding:22px}
+    .stat strong{display:block;font-size:28px;letter-spacing:-.04em}
+    .stat span,.muted{color:var(--muted);font-size:13px}
+    section{padding:72px 0}
+    .section-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:22px;flex-wrap:wrap}
+    h2{margin:0;font-size:28px;letter-spacing:-.04em}
+    .section-head p{margin:0;color:var(--muted);max-width:560px}
+    .cards{grid-template-columns:repeat(12,minmax(0,1fr))}
+    .card{grid-column:span 4;padding:22px;transition:transform .28s ease,border-color .28s ease,background .28s ease}
+    .card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.18);background:var(--panel-2)}
+    .tag{display:inline-flex;padding:6px 10px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.05);border:1px solid var(--line);color:#dbeafe;margin-bottom:14px}
+    .card h3{margin:0 0 8px;font-size:19px}
+    .card p{margin:0 0 16px;color:#cbd5e1;font-size:14px}
+    .stack{font-size:12px;color:var(--muted)}
+    .split{grid-template-columns:1.1fr .9fr}
+    .panel{padding:28px}
+    .list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+    .list li{padding:16px 0;border-top:1px solid var(--line);color:#dbe4ff}
+    .list li:first-child{border-top:none;padding-top:0}
+    .links{display:flex;gap:12px;flex-wrap:wrap}
+    footer{padding:30px 0 42px;color:var(--muted);font-size:13px}
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .45s cubic-bezier(.22,1,.36,1)}
+    .reveal.visible{opacity:1;transform:none}
+    @media (max-width: 900px){
+      .stats,.split{grid-template-columns:1fr}
+      .card{grid-column:span 12}
+      h1{max-width:none}
+      .nav .inner{gap:16px;flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap inner">
+      <div class="brand">Belentani</div>
+      <nav class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#concept">Concept</a>
+        <a href="#capabilities">Capabilities</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> Creative technologist · AI systems · immersive web</span>
+        <h1 class="reveal">Building living digital worlds.</h1>
+        <p class="lead reveal">Belentani is a transmedia project where music, identity, and systems design move as one. The experience feels cinematic, but it stays clear, fast, and usable.</p>
+        <div class="actions reveal">
+          <a class="btn primary" href="https://www.youtube.com/@belentani" target="_blank" rel="noreferrer">YouTube</a>
+          <a class="btn" href="https://open.spotify.com/artist/belentani" target="_blank" rel="noreferrer">Spotify</a>
+          <a class="btn" href="#work">Explore the work</a>
+        </div>
+
+        <div class="grid stats reveal">
+          <div class="stat"><strong>7+</strong><span>Years in Trust & Safety</span></div>
+          <div class="stat"><strong>36+</strong><span>Projects shipped</span></div>
+          <div class="stat"><strong>5</strong><span>Languages in active use</span></div>
+          <div class="stat"><strong>1</strong><span>Unified creative system</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>Selected work</h2>
+          <p>Small set, high signal. Each piece should feel like part of the same universe.</p>
+        </div>
+        <div class="grid cards">
+          <article class="card reveal">
+            <span class="tag">Live experience</span>
+            <h3>Judas Era Portal</h3>
+            <p>Immersive narrative site with music, symbolism, motion control, and social links surfaced where people expect them.</p>
+            <div class="stack">HTML · CSS · JavaScript · Motion · Media</div>
+          </article>
+          <article class="card reveal">
+            <span class="tag">Systems</span>
+            <h3>AI Safety workflows</h3>
+            <p>Decision frameworks, escalation logic, and structured analysis for high-risk environments.</p>
+            <div class="stack">Policy · QA · Diagnostics · Automation</div>
+          </article>
+          <article class="card reveal">
+            <span class="tag">Creative tech</span>
+            <h3>Voice + music stack</h3>
+            <p>Audio-first systems combining voice, music identity, and multilingual interaction.</p>
+            <div class="stack">Audio · Voice · Web APIs · Multilingual</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="concept">
+      <div class="wrap">
+        <div class="grid split">
+          <div class="panel reveal">
+            <div class="section-head" style="margin-bottom:14px">
+              <h2>Concept</h2>
+            </div>
+            <p class="muted">The project uses fiction as a frame, but the product stays practical: biography, music, links, visual identity, and clear calls to action.</p>
+            <ul class="list">
+              <li>Minimal interface with cinematic atmosphere</li>
+              <li>Visible links to music platforms and video</li>
+              <li>Motion that supports the story instead of fighting it</li>
+              <li>Modular structure that can expand safely</li>
+            </ul>
+          </div>
+          <div class="panel reveal">
+            <div class="section-head" style="margin-bottom:14px">
+              <h2>Links</h2>
+            </div>
+            <div class="links">
+              <a class="btn" href="https://github.com/belentani7pedro" target="_blank" rel="noreferrer">GitHub</a>
+              <a class="btn" href="https://www.instagram.com/belentani_" target="_blank" rel="noreferrer">Instagram</a>
+              <a class="btn" href="https://music.apple.com/artist/belentani" target="_blank" rel="noreferrer">Apple Music</a>
+              <a class="btn" href="https://soundcloud.com/belentani" target="_blank" rel="noreferrer">SoundCloud</a>
+              <a class="btn" href="mailto:belentani7pedro@gmail.com">Email</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="capabilities">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>Capabilities</h2>
+          <p>Enough breadth to ship end-to-end, enough restraint to keep the experience elegant.</p>
+        </div>
+        <div class="grid cards">
+          <article class="card reveal"><h3>Frontend</h3><p>Responsive interfaces, motion systems, premium polish.</p><div class="stack">HTML · CSS · JS · GSAP · WebGL</div></article>
+          <article class="card reveal"><h3>AI Systems</h3><p>RAG flows, orchestration, evaluation, prompt design.</p><div class="stack">Python · FastAPI · LangChain</div></article>
+          <article class="card reveal"><h3>Voice</h3><p>Speech-first products, multilingual pipelines, call flows.</p><div class="stack">Whisper · TTS · Twilio · WhatsApp</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="panel reveal">
+          <div class="section-head" style="margin-bottom:10px">
+            <h2>Contact</h2>
+            <p>Open to creative systems, music-led products, and high-signal collaborations.</p>
+          </div>
+          <div class="links">
+            <a class="btn primary" href="mailto:belentani7pedro@gmail.com">belentani7pedro@gmail.com</a>
+            <a class="btn" href="https://www.belentani.es/" target="_blank" rel="noreferrer">Website</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Belentani · living system, not template.</div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>
